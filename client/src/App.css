@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +35,33 @@
   to {
     transform: rotate(360deg);
   }
+} */
+
+.navbar-outer{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 150px;
+  background-color: rgb(250, 226, 194);
 }
+
+.navbar-inner{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 130px;
+  background-color: rgb(245, 171, 121);
+  margin: 3px;
+}
+
+.navbar-button{
+  background-color: rgb(241, 234, 234);
+  width: 120px;
+  height: 38px;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  margin-left: 2px;
+font-size: 20px;
+font-weight: bold;}
