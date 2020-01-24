@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/PrafulManandhar/Resturant-Management/issues"
   },
-  "homepage": "https://github.com/PrafulManandhar/Resturant-Management#readme"
+  "homepage": "https://github.com/PrafulManandhar/Resturant-Management#readme",
+  "dependencies": {
+    "create-react-app": "^3.3.0"
+  }
 }
