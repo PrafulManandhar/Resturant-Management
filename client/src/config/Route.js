@@ -3,6 +3,7 @@ export default{
     ADD_OUTLET:"/outlet/add",
     MANAGE_OUTLET:"/outlet",
     EDIT_OUTLET:"/outlet/edit",
+    DELETE_OUTLET:"/outlet",
 
      // categories ROUTE
      ADD_CATEGORIES:"/categories/add",

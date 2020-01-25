@@ -1,8 +1,11 @@
 module.exports={
     // OUtlet ROUTE
     ADD_OUTLET:"/outlet/add",
-    MANAGE_OUTLET:"/outlet",
+    GET_OUTLETS:"/outlet",
     EDIT_OUTLET:"/outlet/edit",
+    GET_OUTLET:"/outlet/:slug",
+    UPDATE_OUTLET:"/outlet/:slug",
+    DELETE_OUTLET:"/outlet/:slug",
 
      // categories ROUTE
      ADD_CATEGORIES:"/categories/add",
