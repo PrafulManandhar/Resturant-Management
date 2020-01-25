@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Navbar from './Navbar';
+import Navbars from './Navbar';
 export default class Dashboard extends Component {
   render() {
     return (
-      <div> <Navbar/> </div>
+      <div> <Navbars/> </div>
     );
   }
 }

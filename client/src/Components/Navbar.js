@@ -1,72 +1,134 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import {
+  Nav,
+  Col,
+  NavDropdown,
+  Form,
+  FormControl,
+  Button,
+  Navbar,
+  Row
+} from "react-bootstrap";
+import "../CustomStyle/customCss.css";
 
-
-export default class Navbar extends Component {
+export default class Navbars extends Component {
   state = {
     navItem: "admin"
   };
+  
   render() {
     const clickedItem = this.state.navItem;
     let navbarSecondary;
     if (clickedItem === "admin") {
       navbarSecondary = (
-        <div className="navbar-inner">
-          <Link to="/outlet/add" className="navbar-button">
-            Outlet
-          </Link>
-          <Link to="/Category" className="navbar-button">
-            Category
-          </Link>
-          <Link to="/menu" className="navbar-button">
-            Menu
-          </Link>
-        </div>
+        <Navbar bg="light" expand="lg">
+          <Navbar.Brand>Setup</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+              <NavDropdown title="Outlet" id="basic-nav-dropdown">
+                <NavDropdown.Item>
+                  {" "}
+                  <Link to="/outlet/add" className="navbar-button">
+                    Add Outlet
+                  </Link>
+                </NavDropdown.Item>
+                <NavDropdown.Item>
+                  {" "}
+                  <Link to="/outlet/view" className="navbar-button">
+                    View Outlet
+                  </Link>
+                </NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+     
       );
-    }else if(clickedItem === "front"){
-        navbarSecondary = (
-            <div className="navbar-inner">
-              <Link to="/frontdesk" className="navbar-button">
-                Front Desk 
-              </Link>
-              <Link to="/Category" className="navbar-button">
-                Category
-              </Link>
-              <Link to="/menu" className="navbar-button">
-                Menu
-              </Link>
-            </div>
-          );
-    }else if(clickedItem === "account"){
-        navbarSecondary = (
-            <div className="navbar-inner">
-              <Link to="/sales" className="navbar-button">
-                Sales
-              </Link>
-              <Link to="/purchase" className="navbar-button">
-                Purchase
-              </Link>
-             
-            </div>
-          );
+    } else if (clickedItem === "front") {
+      navbarSecondary = (
+        <Navbar bg="light" expand="lg">
+        <Navbar.Brand>Front</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <NavDropdown title="Front" id="basic-nav-dropdown">
+              <NavDropdown.Item>
+                {" "}
+                <Link to="/outlet/add" className="navbar-button">
+                  Front Desk
+                </Link>
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+   
+      );
+    } else if (clickedItem === "account") {
+      navbarSecondary = (
+        <Navbar bg="light" expand="lg">
+        <Navbar.Brand>Account</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <NavDropdown title="Account" id="basic-nav-dropdown">
+              <NavDropdown.Item>
+                {" "}
+                <Link to="/outlet/add" className="navbar-button">
+                  View Today Sales
+                </Link>
+              </NavDropdown.Item>
         
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+   
+      );
     }
 
     return (
-      <div className="navbar-outer">
-        <div className="navbar-inner">
-          <button onClick={() => this.setState({ navItem: "admin" })}>
-            Setup
-          </button>
-          <button onClick={() => this.setState({ navItem: "front" })}>
-            Front
-          </button>
-          <button onClick={() => this.setState({ navItem: "account" })}>
-            Account
-          </button>
-        </div>
-        {navbarSecondary}
-      </div>
+      <Col>
+        <Navbar bg="light" expand="lg">
+          <Navbar.Brand>Pragya Newari Khaja Ghar</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+              <Nav.Link>
+                {" "}
+                <button onClick={() => this.setState({ navItem: "admin" })}>
+                  Setup
+                </button>
+              </Nav.Link>
+              <Nav.Link>
+                {" "}
+                <button onClick={() => this.setState({ navItem: "front" })}>
+                  Front
+                </button>
+              </Nav.Link>
+              <Nav.Link>
+                {" "}
+                <button onClick={() => this.setState({ navItem: "account" })}>
+                  Account
+                </button>
+              </Nav.Link>
+            </Nav>
+            <Form inline>
+              <FormControl
+                type="text"
+                placeholder="Search"
+                className="mr-sm-2"
+              />
+              <Button variant="outline-success">Search</Button>
+            </Form>
+          </Navbar.Collapse>
+        </Navbar>
+        <Row>
+          <Col>{navbarSecondary}</Col>
+        </Row>
+      </Col>
     );
   }
 }
