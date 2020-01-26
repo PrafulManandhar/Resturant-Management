@@ -8,6 +8,8 @@ import EditOutlet from "./Components/Outlet/EditOutlet";
 import AddCategory from './Components/Category/AddCategory'
 import EditCategory from './Components/Category/EditCategory'
 import ViewCategory from './Components/Category/ViewCategory'
+import AddMenu from './Components/Menu/AddMenu'
+
 function App() {
   return (
     <Switch>
@@ -18,6 +20,8 @@ function App() {
       <Route path="/category/add" component={AddCategory} exact />
       <Route path="/category/view" component={ViewCategory} exact />
       <Route path="/categories/edit/:slug" component={EditCategory} exact />
+      <Route path="/menu/add" component={AddMenu} exact />
+
     </Switch>
   );
 }

@@ -18,5 +18,8 @@ module.exports={
       // Menu ROUTE
     ADD_MENU:"/menu/add",
     MANAGE_MENU:"/menu",
-    EDIT_MENU:"/menu/edit"
+    EDIT_MENU:"/menu/edit",
+    GET_MENU:"/menu/:slug",
+    UPDATE_MENU:"/menu/:slug",
+    DELETE_MENU:"/menu/:slug",
 }

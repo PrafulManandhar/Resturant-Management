@@ -5,6 +5,9 @@ const Success ={
     ADD_CATEGORY :"New Category has been Successfully Created",
     EDIT_CATEGORY :"Category Successfully Updated",
     DELETE_CATEGORY : "Category Successfully Deleted",
+    ADD_MENU :"New Menu has been Successfully Created",
+    EDIT_MENU :"Menu Successfully Updated",
+    DELETE_MENU : "Menu Successfully Deleted",
 };
 
 const Errors ={
@@ -14,7 +17,12 @@ const Errors ={
     ADD_CATEGORY:"Something went wrong while creating new CATEGORY",
     EDIT_CATEGORY:"Failed to update the CATEGORY",
     DELETE_CATEGORY:"Failed to delete the CATEGORY",
-    VIEW_CATEGORY:"Failed to load the data"
+    VIEW_CATEGORY:"Failed to load the category",
+     ADD_MENU :"Something went wrong while creating new Menu",
+    EDIT_MENU :"Failed to update the Menu",
+    DELETE_MENU : "Failed to delete the Menu",
+    VIEW_MENU:"Failed to load the Menu",
+
 
 
 }
