@@ -21,7 +21,7 @@ router.post(Router.ADD_OUTLET, (req, res) => {
   console.log("outlet",outlet)
   let Statement = "INSERT INTO outlet (T_name) VALUES (?)";
 
-  mysqlConnection.query(Statement, outlet, (err, results) => {
+  mysqlConnection.query(Statement, [outlet], (err, results) => {
       console.log("results",results)
     if (!err) {
       res.json({ type: "success", message: Success.ADD_OUTLET });
