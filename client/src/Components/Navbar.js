@@ -41,6 +41,20 @@ export default class Navbars extends Component {
                   </Link>
                 </NavDropdown.Item>
               </NavDropdown>
+              <NavDropdown title="Category" id="basic-nav-dropdown">
+                <NavDropdown.Item>
+                  {" "}
+                  <Link to="/category/add" className="navbar-button">
+                    Add Category
+                  </Link>
+                </NavDropdown.Item>
+                <NavDropdown.Item>
+                  {" "}
+                  <Link to="/category/view" className="navbar-button">
+                    View Category
+                  </Link>
+                </NavDropdown.Item>
+              </NavDropdown>
             </Nav>
           </Navbar.Collapse>
         </Navbar>

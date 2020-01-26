@@ -1,42 +1,74 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
-import classnames from "classnames";
 import Spinner from "../../UI/Spinner/Spinner";
-import { withRouter } from "react-router-dom";
-import Routes from "../../config/Route";
-import validateOutlet from "../../Validation/Admin/OutletValidation";
-import Modal from "../../UI/Modal/messageModal";
 import Navbar from '../Navbar'
-class AddOutlet extends Component {
+import Modal from "../../UI/Modal/messageModal";
+import validatecategory from "../../Validation/Admin/CategoryValidation";
+
+import classnames from "classnames";
+
+export default class EditCategory extends Component {
   state = {
-    loading: false,
+    loading: true,
     show: false,
     message: "",
-    outlet: "",
-    errors: ""
+    category: "",
+    errors: "",
+    alertVariant: ""
   };
   changeHandler = event => {
     this.setState({ [event.target.name]: event.target.value, errors: "" });
   };
 
   componentDidMount = async () => {
-    // let isAuthorized = await checkPermission(SLUGS.ADD_CATEGORIES);
-    // if (!isAuthorized) {
-    //   this.props.history.replace(Routes.UNAUTHORIZED);
-    // }
-    // this.setState({ ip: await getIp() });
+      let slug = this.props.match.params.slug;
+      console.log(slug)
+    await axios
+      .get(
+        `http://localhost:5000/api/category/category/${this.props.match.params.slug}`
+      )
+      .then(res => {
+        if (res.data.type === "error") {
+          this.setState(
+            {
+              message: res.data.message,
+              alertVariant: "danger",
+              errors: ""
+            },
+            () => {
+              this.showAlerts();
+            }
+          );
+        } else {
+          console.log("category",res.data.data)
+          this.setState({ category: res.data.data[0].C_name });
+        }
+      })
+      .catch(err => {
+        console.log("eror in edit category", err);
+      });
+    this.setState({ loading: false });
   };
-
-  AddOutlet = async e => {
+  showAlerts = () => {
+    this.setState({ show: true });
+  };
+  modalClose = () => {
+    this.setState({ show: false });
+  };
+  updatecategory = async e => {
     e.preventDefault();
     let data = {
-      outlet: this.state.outlet,
+      category: this.state.category
     };
-    const { errors, isValid } = validateOutlet(data);
+    console.log("update category",data)
+    const { errors, isValid } = validatecategory(data);
     if (isValid) {
       await axios
-        .post("http://localhost:5000/api/order/outlet/add", data)
+        .put(
+          `http://localhost:5000/api/category/category/${this.props.match.params.slug}`,
+          data
+        )
         .then(res => {
           if (res.data.type === "success") {
             this.setState(
@@ -60,7 +92,7 @@ class AddOutlet extends Component {
         })
         .catch(err => {
           alert("ERRR");
-        
+
           this.setState({ errors: err.response.data.errors }, () => {
             console.log(this.state.errors);
           });
@@ -69,14 +101,6 @@ class AddOutlet extends Component {
       this.setState({ errors });
     }
   };
-
-  showAlerts = () => {
-    this.setState({ show: true });
-  };
-  modalClose = () => {
-    this.setState({ show: false });
-  };
-
   render() {
     let { errors } = this.state;
     let display = <Spinner />;
@@ -91,35 +115,35 @@ class AddOutlet extends Component {
             <Row noGutters>
               <Col className="p-3 m-2">
                 <div className="mt-2">
-                  <h2>Add outlet</h2>
+                  <h2>Edit category</h2>
                 </div>
                 <hr />
                 <Card>
                   <Card.Body>
-                    <h5>Add outlet</h5>
+                    <h5>Edit category</h5>
                     <p style={{ fontSize: ".9rem", color: "#ACACAC" }}>
-                      Use this form to add new outlet
+                      Use this form to update existing category
                     </p>
-                    <Form onSubmit={this.AddOutlet}>
+                    <Form onSubmit={this.updatecategory}>
                       <Form.Group>
                         <Row>
                           <Col sm="12 mb-2" md="2 mb-0">
-                            <Form.Label>Add Outlet</Form.Label>
+                            <Form.Label>category</Form.Label>
                           </Col>
                           <Col md="6">
                             <Form.Control
-                              // className={classnames({
-                              //   "is-invalid": errors.outlet
-                              // })}
+                              className={classnames({
+                                "is-invalid": errors.category
+                              })}
                               type="text"
-                              placeholder="outlet"
-                              name="outlet"
+                              value={this.state.category}
+                              name="category"
                               onChange={this.changeHandler}
                             />
 
-                            {/* <Form.Control.Feedback type="invalid">
-                              {errors.outlet}
-                            </Form.Control.Feedback> */}
+                            <Form.Control.Feedback type="invalid">
+                              {errors.category}
+                            </Form.Control.Feedback>
                           </Col>
                         </Row>
                       </Form.Group>
@@ -132,7 +156,7 @@ class AddOutlet extends Component {
                               variant="primary"
                               type="submit"
                             >
-                              Submit
+                              Update
                             </Button>
                           </Col>
                         </Row>
@@ -151,16 +175,6 @@ class AddOutlet extends Component {
           />
         </>
       );
-
-    return <>{display}</>;
+    return<>{display}</>;
   }
 }
-// const mapActionToProps = dispatch => ({
-//   login: () => dispatch(login()),
-//   auth: payload => dispatch(auth(payload))
-// });
-export default withRouter(AddOutlet);
-// export default connect(
-//   null,
-//   mapActionToProps
-// )(withRouter(AddOutlet));
