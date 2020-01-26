@@ -5,15 +5,15 @@ import classnames from "classnames";
 import Spinner from "../../UI/Spinner/Spinner";
 import { withRouter } from "react-router-dom";
 import Routes from "../../config/Route";
-import validateOutlet from "../../Validation/Admin/OutletValidation";
+import validatecategory from "../../Validation/Admin/CategoryValidation";
 import Modal from "../../UI/Modal/messageModal";
 import Navbar from '../Navbar'
-class AddOutlet extends Component {
+class AddCategory extends Component {
   state = {
     loading: false,
     show: false,
     message: "",
-    outlet: "",
+    category: "",
     errors: ""
   };
   changeHandler = event => {
@@ -28,15 +28,16 @@ class AddOutlet extends Component {
     // this.setState({ ip: await getIp() });
   };
 
-  AddOutlet = async e => {
+  Addcategory = async e => {
     e.preventDefault();
     let data = {
-      outlet: this.state.outlet,
+      category: this.state.category,
     };
-    const { errors, isValid } = validateOutlet(data);
+    console.log(data)
+    const { errors, isValid } = validatecategory(data);
     if (isValid) {
       await axios
-        .post("http://localhost:5000/api/order/outlet/add", data)
+        .post("http://localhost:5000/api/category/category/add", data)
         .then(res => {
           if (res.data.type === "success") {
             this.setState(
@@ -91,35 +92,35 @@ class AddOutlet extends Component {
             <Row noGutters>
               <Col className="p-3 m-2">
                 <div className="mt-2">
-                  <h2>Add outlet</h2>
+                  <h2>Add category</h2>
                 </div>
                 <hr />
                 <Card>
                   <Card.Body>
-                    <h5>Add outlet</h5>
+                    <h5>Add category</h5>
                     <p style={{ fontSize: ".9rem", color: "#ACACAC" }}>
-                      Use this form to add new outlet
+                      Use this form to add new category
                     </p>
-                    <Form onSubmit={this.AddOutlet}>
+                    <Form onSubmit={this.Addcategory}>
                       <Form.Group>
                         <Row>
                           <Col sm="12 mb-2" md="2 mb-0">
-                            <Form.Label>Add Outlet</Form.Label>
+                            <Form.Label>Add category</Form.Label>
                           </Col>
                           <Col md="6">
                             <Form.Control
-                              // className={classnames({
-                              //   "is-invalid": errors.outlet
-                              // })}
+                              className={classnames({
+                                "is-invalid": errors.category
+                              })}
                               type="text"
-                              placeholder="outlet"
-                              name="outlet"
+                              placeholder="category"
+                              name="category"
                               onChange={this.changeHandler}
                             />
 
-                            {/* <Form.Control.Feedback type="invalid">
-                              {errors.outlet}
-                            </Form.Control.Feedback> */}
+                            <Form.Control.Feedback type="invalid">
+                              {errors.category}
+                            </Form.Control.Feedback>
                           </Col>
                         </Row>
                       </Form.Group>
@@ -159,8 +160,8 @@ class AddOutlet extends Component {
 //   login: () => dispatch(login()),
 //   auth: payload => dispatch(auth(payload))
 // });
-export default withRouter(AddOutlet);
+export default withRouter(AddCategory);
 // export default connect(
 //   null,
 //   mapActionToProps
-// )(withRouter(AddOutlet));
+// )(withRouter(Addcategory));

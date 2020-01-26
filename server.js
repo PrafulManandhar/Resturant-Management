@@ -13,5 +13,9 @@ const order=require("./routes/api/order");
 //Routes
 app.use("/api/order",order);
 
+const category=require("./routes/api/category");
+//Routes
+app.use("/api/category",category);
+
 const port = process.env.port || 5000;
 app.listen(port, () => console.log(`Server is running on port ${port} `));

@@ -8,7 +8,7 @@ export default{
      // categories ROUTE
      ADD_CATEGORIES:"/categories/add",
      MANAGE_CATEGORIES:"/categories",
-     EDIT_CATEGORIES:"/categories/edit",
+     EDIT_CATEGORY:"/categories/edit",
 
       // Menu ROUTE
     ADD_MENU:"/menu/add",

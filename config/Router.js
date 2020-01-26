@@ -8,9 +8,12 @@ module.exports={
     DELETE_OUTLET:"/outlet/:slug",
 
      // categories ROUTE
-     ADD_CATEGORIES:"/categories/add",
+     ADD_CATEGORY:"/category/add",
      MANAGE_CATEGORIES:"/categories",
-     EDIT_CATEGORIES:"/categories/edit",
+     EDIT_CATEGORY:"/category/edit",
+     GET_CATEGORY:"/category/:slug",
+     UPDATE_CATEGORY:"/category/:slug",
+     DELETE_CATEGORY:"/category/:slug",
 
       // Menu ROUTE
     ADD_MENU:"/menu/add",
