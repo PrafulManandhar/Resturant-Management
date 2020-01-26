@@ -126,12 +126,12 @@ export default class AddMenu extends Component {
             <Row noGutters>
               <Col className="p-3 m-2">
                 <div className="mt-2">
-                  <h2>Add menu</h2>
+                  <h2>Add Menu</h2>
                 </div>
                 <hr />
                 <Card>
                   <Card.Body>
-                    <h5>Add menu</h5>
+                    <h5>Add Menu</h5>
                     <p style={{ fontSize: ".9rem", color: "#ACACAC" }}>
                       Use this form to add new menu
                     </p>
