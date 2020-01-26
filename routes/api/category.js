@@ -16,12 +16,13 @@ mysqlConnection.connect();
 router.get("/test", (req, res) => res.json({ hi: "hello" }));
 
 router.post(Router.ADD_CATEGORY, (req, res) => {
+  console.log("add")
   let category = req.body.category;
   console.log("category", req.body);
   let Statement = "INSERT INTO category (C_name) VALUES (?)";
 
   mysqlConnection.query(Statement, category, (err, results) => {
-    console.log("results", results);
+    console.log("results", err);
     if (!err) {
       res.json({ type: "success", message: Success.ADD_CATEGORY });
     } else {
