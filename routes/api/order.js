@@ -55,7 +55,7 @@ router.get(Router.GET_OUTLET,(req,res)=>{
   }
   let statement = "SELECT T_name FROM outlet WHERE T_id=?"
 
-  mysqlConnection.query(statement,slug,(err,result)=>{
+  mysqlConnection.query(statement,[slug],(err,result)=>{
     if(!err){
       console.log(result)
       res.json({type:"success" , data:result})

@@ -12,13 +12,38 @@ import Modal from "../../UI/Modal/messageModal";
 const dataTableData = {
   columns: [
     {
-      label: "C-id",
-      field: "cid",
+      label: "M_id",
+      field: "mid",
       sort: "asc"
     },
     {
-      label: "Category Name",
-      field: "cname",
+      label: "Menu Name",
+      field: "mname",
+      sort: "asc"
+    },
+    {
+      label: "Menu Status",
+      field: "mstatus",
+      sort: "asc"
+    },
+    {
+      label: "Menu Category",
+      field: "mcategory",
+      sort: "asc"
+    },
+    {
+      label: "Price",
+      field: "price",
+      sort: "asc"
+    },
+    {
+      label: "Cost Price",
+      field: "cprice",
+      sort: "asc"
+    },
+    {
+      label: "Description",
+      field: "description",
       sort: "asc"
     },
     {
@@ -42,8 +67,9 @@ export default class ViewMenu extends Component {
     };
   }
   deleteCategory = async () => {
+    console.log("id",this.state.deletingId)
     await Axios.delete(
-      `http://localhost:5000/api/category/category/${this.state.deletingId}`
+      `http://localhost:5000/api/Menu/menu/${this.state.deletingId}`
     )
       .then(async res => {
         if (res.data.type === "error") {
@@ -84,7 +110,7 @@ export default class ViewMenu extends Component {
   };
 
   loadData =async()=>{
-    await Axios.get("http://localhost:5000/api/category/categories")
+    await Axios.get("http://localhost:5000/api/Menu/menu")
       .then(res => {
         console.log(res);
         this.setState({ data: res.data.data });
@@ -94,12 +120,13 @@ export default class ViewMenu extends Component {
 
   editHandler = e => {
     let slug = e.target.id;
-    this.props.history.push(`${Routes.EDIT_CATEGORY}/${slug}`);
+    this.props.history.push(`${Routes.EDIT_MENU}/${slug}`);
   };
   deleteHandler = e => {
+    console.log(e)
     let slug = e.target.id;
 
-    console.log("deleteHandler");
+    console.log("deleteHandler",slug);
     this.setState({ confirmShow: true, deletingId: slug });
   };
 
@@ -113,7 +140,7 @@ export default class ViewMenu extends Component {
     this.setState({ show: false });
   };
   componentDidMount = async () => {
-    await Axios.get("http://localhost:5000/api/category/categories")
+    await Axios.get("http://localhost:5000/api/Menu/menu")
       .then(res => {
         console.log(res);
         this.setState({ data: res.data.data });
@@ -131,27 +158,32 @@ export default class ViewMenu extends Component {
     for (let record of this.state.data) {
       i++;
       dataTableData.rows.push({
-        cid: record.id,
-        cname: record.cnames,
+        mid: record.M_id,
+        mname: record.MName,
+        mcategory:record.MCategory,
+        mstatus:record.MStatus,
+        price:record.Price,
+        cprice : record.CPrice,
+        description: record.Decsription,
         action: (
           <div>
             <button
               className="btn btn-outline-primary"
-              id={record.id}
+              id={record.M_id}
               onClick={this.editHandler}
             >
               Edit
             </button>
             <button
               className="btn btn-outline-success"
-              id={record.id}
+              id={record.M_id}
               onClick={this.viewHandler}
             >
               View
             </button>
             <button
               className="btn btn-outline-danger"
-              id={record.id}
+              id={record.M_id}
               onClick={this.deleteHandler}
             >
               Delete
@@ -178,7 +210,7 @@ export default class ViewMenu extends Component {
             >
               <Row noGutters>
                 <Col className="p-3 m-2">
-                  <h2>View Category</h2>
+                  <h2>View Menu</h2>
                   <hr />
                   <Card>
                     <Card.Body>
@@ -197,7 +229,7 @@ export default class ViewMenu extends Component {
             <ConfirmationModal
               show={this.state.confirmShow}
               close={this.confirmModalClose}
-              type="Category"
+              type="Menu"
               Confirmdelete={this.deleteCategory}
             />
             <Modal
