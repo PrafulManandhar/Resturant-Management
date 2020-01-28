@@ -22,9 +22,6 @@ const Errors ={
     EDIT_MENU :"Failed to update the Menu",
     DELETE_MENU : "Failed to delete the Menu",
     VIEW_MENU:"Failed to load the Menu",
-
-
-
 }
 
 exports.Success = Success;

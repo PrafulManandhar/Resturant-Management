@@ -21,7 +21,7 @@ router.post(Router.ADD_OUTLET, (req, res) => {
   console.log("outlet",outlet)
   let Statement = "INSERT INTO outlet (T_name) VALUES (?)";
 
-  mysqlConnection.query(Statement, outlet, (err, results) => {
+  mysqlConnection.query(Statement, [outlet], (err, results) => {
       console.log("results",results)
     if (!err) {
       res.json({ type: "success", message: Success.ADD_OUTLET });
@@ -55,7 +55,7 @@ router.get(Router.GET_OUTLET,(req,res)=>{
   }
   let statement = "SELECT T_name FROM outlet WHERE T_id=?"
 
-  mysqlConnection.query(statement,slug,(err,result)=>{
+  mysqlConnection.query(statement,[slug],(err,result)=>{
     if(!err){
       console.log(result)
       res.json({type:"success" , data:result})

@@ -98,8 +98,8 @@ export default class ViewCategory extends Component {
   };
   deleteHandler = e => {
     let slug = e.target.id;
+    console.log("deleteHandler",slug);
 
-    console.log("deleteHandler");
     this.setState({ confirmShow: true, deletingId: slug });
   };
 

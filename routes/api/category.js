@@ -94,8 +94,8 @@ router.delete(Router.DELETE_CATEGORY, (req, res) => {
   let statement = "Delete FROM category WHERE C_id=?";
 
   mysqlConnection.query(statement, [slug], (err, result) => {
-    console.log("affected", result.affectedRows);
-    if (!err && result.affectedRows > 0) {
+    console.log("affected");
+    if (!err) {
       res.json({ type: "success", message: Success.DELETE_CATEGORY });
     } else {
       res.json({ type: "error", message: Errors.DELETE_CATEGORY });

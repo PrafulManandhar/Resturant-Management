@@ -9,6 +9,9 @@ import AddCategory from './Components/Category/AddCategory'
 import EditCategory from './Components/Category/EditCategory'
 import ViewCategory from './Components/Category/ViewCategory'
 import AddMenu from './Components/Menu/AddMenu'
+import ViewMenu from './Components/Menu/ViewMenu'
+import EditMenu from './Components/Menu/EditMenu'
+
 
 function App() {
   return (
@@ -21,6 +24,8 @@ function App() {
       <Route path="/category/view" component={ViewCategory} exact />
       <Route path="/categories/edit/:slug" component={EditCategory} exact />
       <Route path="/menu/add" component={AddMenu} exact />
+      <Route path="/menu/view" component={ViewMenu} exact />
+      <Route path="/menu/edit/:slug" component={EditMenu} exact />
 
     </Switch>
   );

@@ -15,6 +15,8 @@ mysqlConnection.connect();
 //@access Public
 router.get("/test", (req, res) => res.json({ hi: "hello" }));
 
+
+
 //Add new Menu
 //Method : Post
 router.post(Router.ADD_MENU, (req, res) => {
@@ -43,7 +45,7 @@ router.post(Router.ADD_MENU, (req, res) => {
 //Get all the menu for Viewing 
 //Method Post 
 router.get(Router.MANAGE_MENU, (req, res) => {
-  let Statement = "SELECT M_id AS M_id , M_name AS MName , M_category AS MCategory, price AS Price , cost_price AS CPrice , description AS Decsription from menu";
+  let Statement = "SELECT M_id AS M_id , M_name AS MName ,M_status AS MStatus ,M_category AS MCategory, price AS Price , cost_price AS CPrice , description AS Decsription from menu";
 
   mysqlConnection.query(Statement, (err, results) => {
     console.log("results", results);
@@ -62,12 +64,23 @@ router.get(Router.GET_MENU, (req, res) => {
   if (!slug) {
     return res.json({ type: "error", message: "Failed to load menu" });
   }
-  let statement = "SELECT  M_id AS M_id , M_name AS MName , M_category AS MCategory, price AS Price , cost_price AS CPrice , description AS Decsription FROM menu WHERE C_id=?";
+  let statement = "SELECT M_name AS MName , M_category AS MCategory,M_status AS MStatus ,price AS Price , cost_price AS CPrice , description AS Description FROM menu WHERE M_id=?; Select C_name from category WHERE C_id=(SELECT M_category from menu where M_id = ?)";
 
-  mysqlConnection.query(statement, slug, (err, result) => {
+  mysqlConnection.query(statement, [slug,slug], (err, result) => {
+    console.log("resultsfafafa",result[0])
+    console.log("results",result[1])
+   let data={
+      MName:result[0][0].MName,
+      MCategory:result[1][0].C_name,
+      Price:result[0][0].Price,
+      CPrice:result[0][0].CPrice,
+      Decsription:result[0][0].Description,
+      MStatus:result[0][0].MStatus
+    }
+    console.log(data)
     if (!err) {
-      console.log(result);
-      res.json({ type: "success", data: result });
+      console.log("update resyult",result[0].MCategory)
+      res.json({ type: "success", data: data });
     } else {
       res.json({ type: "error", message: Errors.VIEW_MENU });
     }
@@ -77,7 +90,6 @@ router.get(Router.GET_MENU, (req, res) => {
 //Update OUTLET FROM ID
 router.put(Router.UPDATE_MENU, (req, res) => {
   let slug = req.params.slug;
-  console.log(slug);
   if (!slug) {
     return res.json({ type: "error", message: "Failed to Update menu" });
   }
@@ -85,10 +97,13 @@ router.put(Router.UPDATE_MENU, (req, res) => {
   Cost_Price = Cost_Price ? Cost_Price : 0;
   Description = Description ? Description : "";
   let {errors,isValid} = ValidateMenu(req.body);
+  
   if(isValid){
   let statement = "UPDATE menu SET M_name = ? , M_status = ? , M_category = ? , price = ? , cost_price = ? , description = ? WHERE M_id = ?";
 
   mysqlConnection.query(statement, [MName,MStatus,MCategory,Price,Cost_Price,Description, slug], (err, result) => {
+    console.log("err",err)
+    console.log("result",result)
     if (!err && result.affectedRows>0) {
       console.log(result);
       res.json({ type: "success", message: Success.EDIT_MENU });
@@ -103,6 +118,7 @@ router.put(Router.UPDATE_MENU, (req, res) => {
 
 //Delete OUTLET FROM ID
 router.delete(Router.DELETE_MENU, (req, res) => {
+  console.log("react")
   let slug = req.params.slug;
   console.log(slug);
   if (!slug) {
