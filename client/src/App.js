@@ -11,11 +11,14 @@ import ViewCategory from './Components/Category/ViewCategory'
 import AddMenu from './Components/Menu/AddMenu'
 import ViewMenu from './Components/Menu/ViewMenu'
 import EditMenu from './Components/Menu/EditMenu'
+import Login from './Components/login/login'
 
 
 function App() {
   return (
     <Switch>
+            <Route path="/login" component={Login} exact />
+
       <Route path="/" component={Dashboard} exact />
       <Route path="/outlet/add" component={AddOutlet} exact />
       <Route path="/outlet/view" component={ViewOutlet} exact />

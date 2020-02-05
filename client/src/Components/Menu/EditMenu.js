@@ -4,10 +4,11 @@ import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import classnames from "classnames";
 import Spinner from "../../UI/Spinner/Spinner";
 import { withRouter } from "react-router-dom";
-import Routes from "../../config/Route";
 import validateMenu from "../../Validation/Admin/MenuValidation";
 import Modal from "../../UI/Modal/messageModal";
 import Navbar from "../Navbar";
+import Routes from "../../config/Route";
+
 export default class EditMenu extends Component {
   state = {
     loading: false,
@@ -18,14 +19,14 @@ export default class EditMenu extends Component {
     MName: "",
     MCategory: "",
     Price: "",
-  MStatus: "",
+    MStatus: "",
     Cost_Price: "",
     Description: "",
     categories: "",
     alertVariant: ""
   };
   changeHandler = event => {
-    this.setState({ [event.target.name]: event.target.value, errors: "" },console.log( [event.target.name]= event.target.value));
+    this.setState({ [event.target.name]: event.target.value, errors: "" });
   };
 
   componentDidMount = async () => {
@@ -35,7 +36,7 @@ export default class EditMenu extends Component {
     // }
     // this.setState({ ip: await getIp() });
     let slug = this.props.match.params.slug;
-    console.log(slug);
+    console.log("slug", slug);
     await axios
       .get(
         `http://localhost:5000/api/Menu/menu/${this.props.match.params.slug}`
@@ -55,10 +56,11 @@ export default class EditMenu extends Component {
           );
         } else {
           console.log("category", res.data.data);
+
           this.setState({
             MName: res.data.data.MName,
             MCategory: res.data.data.MCategory,
-            price: res.data.data.Price,
+            Price: res.data.data.Price,
             MStatus: res.data.data.MStatus,
             Cost_Price: res.data.data.CPrice,
             Description: res.data.data.Description
@@ -68,13 +70,16 @@ export default class EditMenu extends Component {
       .catch(err => {
         console.log("eror in edit Menu", err);
       });
-      
-      await axios.get("http://localhost:5000/api/Category/categories").then(results=>{
-      console.log("categoryie",results.data.data)
-      this.setState({categories : results.data.data})
-    }).catch(err=>{
-      console.log(err)
-    })
+
+    await axios
+      .get("http://localhost:5000/api/Category/categories")
+      .then(results => {
+        console.log("categoryie", results.data.data);
+        this.setState({ categories: results.data.data });
+      })
+      .catch(err => {
+        console.log(err);
+      });
 
     this.setState({ loading: false });
   };
@@ -89,7 +94,7 @@ export default class EditMenu extends Component {
       Cost_Price: this.state.Cost_Price,
       Description: this.state.Description
     };
-    console.log("Update ",data);
+    console.log("Update ", data);
     const { errors, isValid } = validateMenu(data);
     if (isValid) {
       await axios
@@ -98,6 +103,7 @@ export default class EditMenu extends Component {
           data
         )
         .then(res => {
+          console.log("res.data",res.data)
           if (res.data.type === "success") {
             this.setState(
               {
@@ -112,10 +118,15 @@ export default class EditMenu extends Component {
           } else if (res.data.errors) {
             this.setState({ errors: res.data.errors });
           } else {
-            this.setState({
-              message: res.data.message,
-              alertVariant: "danger"
-            });
+            this.setState(
+              {
+                message: res.data.message,
+                alertVariant: "danger"
+              },
+              () => {
+                this.showAlerts();
+              }
+            );
           }
         })
         .catch(err => {
@@ -128,6 +139,7 @@ export default class EditMenu extends Component {
     } else {
       this.setState({ errors });
     }
+    // this.props.history.push(Routes.MANAGE_MENU);
   };
 
   showAlerts = () => {
@@ -139,15 +151,14 @@ export default class EditMenu extends Component {
 
   render() {
     let { errors } = this.state;
-    console.log(this.state)
-
+    console.log("this.state in side render", this.state);
     let display = <Spinner />;
     const categoriesOptions = [];
     if (!this.state.loading) {
       let categories = this.state.categories;
       for (let category of categories) {
         categoriesOptions.push(
-          <option key={category.id} value={category.cnames}>
+          <option key={category.id} value={category.id}>
             {category.cnames}
           </option>
         );
@@ -225,7 +236,6 @@ export default class EditMenu extends Component {
                                 <option value="available">Available</option>
                                 <option value="Stock-out">Stock Out</option>
                               </Form.Control>
-
                             </Col>
                           </Row>
                         </Form.Group>
@@ -250,7 +260,7 @@ export default class EditMenu extends Component {
                               <Form.Control
                                 value={this.state.Price}
                                 className={classnames({
-                                  "is-invalid": errors.price
+                                  "is-invalid": errors.Price
                                 })}
                                 type="number"
                                 placeholder="Price"
@@ -258,7 +268,7 @@ export default class EditMenu extends Component {
                                 onChange={this.changeHandler}
                               />
                               <Form.Control.Feedback type="invalid">
-                                {errors.price}
+                                {errors.Price}
                               </Form.Control.Feedback>
                             </Col>
                           </Row>
@@ -269,7 +279,13 @@ export default class EditMenu extends Component {
                               <Form.Label value={this.state.Description}>
                                 Description
                               </Form.Label>
-                              <Form.Control as="textarea" rows="10" />
+                              <Form.Control
+                                as="textarea"
+                                rows="10"
+                                value={this.state.Description}
+                                name="Description"
+                                onChange={this.changeHandler}
+                              />
                             </Col>
                           </Row>
                         </Form.Group>

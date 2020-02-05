@@ -5,6 +5,7 @@ import Spinner from "../../UI/Spinner/Spinner";
 import Navbar from '../Navbar'
 import Modal from "../../UI/Modal/messageModal";
 import validatecategory from "../../Validation/Admin/CategoryValidation";
+import Routes from "../../config/Route";
 
 import classnames from "classnames";
 
@@ -100,6 +101,8 @@ export default class EditCategory extends Component {
     } else {
       this.setState({ errors });
     }
+    this.props.history.push(Routes.MANAGE_CATEGORIES);
+
   };
   render() {
     let { errors } = this.state;

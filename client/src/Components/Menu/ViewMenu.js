@@ -67,7 +67,7 @@ export default class ViewMenu extends Component {
     };
   }
   deleteCategory = async () => {
-    console.log("id",this.state.deletingId)
+    console.log("id", this.state.deletingId);
     await Axios.delete(
       `http://localhost:5000/api/Menu/menu/${this.state.deletingId}`
     )
@@ -90,16 +90,14 @@ export default class ViewMenu extends Component {
               alertVariant: "success",
               errors: ""
             },
-           async () => {
+            async () => {
               this.showAlerts();
-             
             }
           );
           this.setState({ loading: true });
           await this.loadData();
           await this.loadTable();
           this.setState({ loading: false });
-
         }
       })
       .catch(err => {
@@ -109,24 +107,36 @@ export default class ViewMenu extends Component {
     this.setState({ confirmShow: false });
   };
 
-  loadData =async()=>{
+  loadData = async () => {
     await Axios.get("http://localhost:5000/api/Menu/menu")
       .then(res => {
         console.log(res);
+        if (res.data.type === "success") {
+          this.setState({ 
+            data: res.data.data });
+        } else if (res.data.type === "error") {
+          this.setState({
+            message: res.data.message,
+            alertVariant: "danger",
+            errors: ""
+          },()=>{
+            this.showAlerts()
+          });
+        }
         this.setState({ data: res.data.data });
       })
       .catch(err => console.log("err", err));
-  }
+  };
 
   editHandler = e => {
     let slug = e.target.id;
     this.props.history.push(`${Routes.EDIT_MENU}/${slug}`);
   };
   deleteHandler = e => {
-    console.log(e)
+    console.log(e);
     let slug = e.target.id;
 
-    console.log("deleteHandler",slug);
+    console.log("deleteHandler", slug);
     this.setState({ confirmShow: true, deletingId: slug });
   };
 
@@ -147,12 +157,12 @@ export default class ViewMenu extends Component {
       })
       .catch(err => console.log("err", err));
 
-      this.loadTable();
-   
+    this.loadTable();
+
     this.setState({ loading: false });
   };
 
-  loadTable = () =>{
+  loadTable = () => {
     let i = 0;
     dataTableData.rows = [];
     for (let record of this.state.data) {
@@ -160,10 +170,10 @@ export default class ViewMenu extends Component {
       dataTableData.rows.push({
         mid: record.M_id,
         mname: record.MName,
-        mcategory:record.MCategory,
-        mstatus:record.MStatus,
-        price:record.Price,
-        cprice : record.CPrice,
+        mcategory: record.MCategory,
+        mstatus: record.MStatus,
+        price: record.Price,
+        cprice: record.CPrice,
         description: record.Decsription,
         action: (
           <div>
@@ -192,7 +202,7 @@ export default class ViewMenu extends Component {
         )
       });
     }
-  }
+  };
 
   render() {
     let display = <Spinner />;

@@ -1,34 +1,53 @@
 const express = require("express");
 const router = express.Router();
-const mysql = require("mysql");
 const Router = require("../../config/Router");
 const Errors = require("../../config/message").Errors;
 const Success = require("../../config/message").Success;
+// const databaseUtility = require("../../utility/databaseUtility");
+// var moment = require("moment""");
+// const databaseUtility = require("../../utility/databaseUtility");
 
-const databaseOptions = require("../../config/database");
-const mysqlConnection = mysql.createConnection(databaseOptions);
-//Connect to database
-mysqlConnection.connect();
+const pool = require("../../config/pool").pool;
 
 //@route GET api/users/test
 //@desc  Test users route
 //@access Public
 router.get("/test", (req, res) => res.json({ hi: "hello" }));
 
-router.post(Router.ADD_CATEGORY, (req, res) => {
-  console.log("add")
-  let category = req.body.category;
-  console.log("category", req.body);
-  let Statement = "INSERT INTO category (C_name) VALUES (?)";
+//addCategory
 
-  mysqlConnection.query(Statement, category, (err, results) => {
-    console.log("results", err);
-    if (!err) {
-      res.json({ type: "success", message: Success.ADD_CATEGORY });
+addCategory = async ({ category }) => {
+  console.log("addCateroga ",category)
+  let Statement = "INSERT INTO category (C_name) VALUES (?)";
+  return pool
+    .execute(Statement, [category])
+    .then(results => {
+      if (results[0].affectedRows > 0) {
+        return { categoryAdded: true };
+      }
+    })
+    .catch(err => {
+      return { categoryAdded: false, err };
+    });
+};
+
+router.post(Router.ADD_CATEGORY, async (req, res) => {
+  let category = req.body.category;
+  console.log("addCategory",category)
+
+
+  let { categoryAdded, err } = await addCategory({ category });
+  if (categoryAdded) {
+    res.json({ type: "success", message: Success.ADD_CATEGORY });
+  } else {
+    if (err && err.code === "ER_DUP_ENTRY") {
+      let errors = {};
+      // errors.category = Errors.CATEGORY_DUPLICATE;
+      res.status(400).json({ errors });
     } else {
       res.json({ type: "error", message: Errors.ADD_CATEGORY });
     }
-  });
+  }
 });
 
 router.get(Router.MANAGE_CATEGORIES, (req, res) => {
@@ -51,6 +70,7 @@ router.get(Router.GET_CATEGORY, (req, res) => {
   if (!slug) {
     return res.json({ type: "error", message: "Failed to load category" });
   }
+  
   let statement = "SELECT C_name FROM category WHERE C_id=?";
 
   mysqlConnection.query(statement, slug, (err, result) => {
