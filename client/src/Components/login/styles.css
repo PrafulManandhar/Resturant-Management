@@ -1,0 +1,177 @@
+@import url("https://fonts.googleapis.com/css?family=Baloo+Bhai|Roboto&display=swap");
+
+body {
+  margin: 0;
+  height: 100vh;
+}
+
+section {
+  overflow: hidden;
+  margin-top: 10px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.login {
+  display: flex;
+  height: 100vh;
+  width: 100vh;
+  justify-items: center;
+  align-items: center;
+  margin-left: 25%;
+}
+
+.login-box {
+  height: 70vh;
+  width: 100vh;
+  display: flex;
+  background: white;
+  border-radius: 20px;
+  transition: all 0.3s ease-in-out;
+  -webkit-box-shadow: 31px 65px 59px -19px rgba(74, 66, 68, 1);
+  -moz-box-shadow: 31px 65px 59px -19px rgba(74, 66, 68, 1);
+  box-shadow: 31px 65px 59px -19px rgba(74, 66, 68, 1);
+}
+
+.login-box:hover {
+  transform: scale(1.01);
+}
+
+.form-area,
+.image-area {
+  height: 100%;
+  width: 50%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.form-area {
+  background-color: rgb(247, 241, 236);
+  border-radius: 20px 0px 0px 20px;
+}
+.image-area {
+  background: rgb(134, 29, 29);
+  position: relative;
+  border-radius: 0px 20px 20px 0px;
+}
+.image {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  mix-blend-mode: soft-light;
+  border-radius: 20px;
+}
+
+.image-text {
+  color: rgb(233, 240, 247);
+  display: flex;
+  font-size: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+* {
+  font-family: "Roboto", sans-serif;
+}
+
+/* .logo{
+  text-transform: uppercase;
+  font-size: 4vh;
+  font-weight: bolder;
+  font-family: 'Baloo Bhai', cursive;
+} */
+
+.description {
+  width: 90%;
+  text-align: center;
+}
+.form-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.welcome-text {
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: bold;
+}
+
+.infinity {
+  text-transform: uppercase;
+  font-size: 20px;
+  color: rgb(216, 3, 39);
+}
+
+.login-description {
+  margin: 10px 0;
+}
+
+.input-box {
+  display: flex;
+  width: 90%;
+  border: 1px solid rgba(255, 46, 46, 0.3);
+  padding: 5px;
+  margin: 5px;
+  border-radius: 50px;
+}
+
+.input-field {
+  width: 100%;
+  display: flex;
+  float: right;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.icon {
+  text-align: center;
+  width: 30px;
+}
+
+/* input {
+  border: none;
+  flex: 1;
+} */
+
+input:focus {
+  outline: none;
+}
+
+.login-button {
+  margin-top: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.loginButton {
+  background-color: rgb(243, 131, 123);
+  width: 120px;
+  height: 35px;
+  border-radius: 10px;
+  -webkit-box-shadow: 31px 65px 59px -19px rgba(74, 66, 68, 1);
+  -moz-box-shadow: 31px 65px 59px -19px rgba(74, 66, 68, 1);
+  box-shadow: 31px 65px 59px -19px rgba(74, 66, 68, 1);
+}
+
+
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin-left: 50px;
+}
+
+.img-profile {
+  height: 2rem;
+  width: 2rem;
+}
+

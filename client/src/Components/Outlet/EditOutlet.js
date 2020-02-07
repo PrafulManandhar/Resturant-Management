@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import Spinner from "../../UI/Spinner/Spinner";
-import Navbar from '../Navbar'
+import Navbar from "../Navbar";
 import Modal from "../../UI/Modal/messageModal";
 import validateOutlet from "../../Validation/Admin/OutletValidation";
+import Routes from "../../config/Route";
 
 import classnames from "classnames";
 
@@ -22,8 +23,8 @@ export default class EditOutlet extends Component {
   };
 
   componentDidMount = async () => {
-      let slug = this.props.match.params.slug;
-      console.log(slug)
+    let slug = this.props.match.params.slug;
+    console.log(slug);
     await axios
       .get(
         `http://localhost:5000/api/order/outlet/${this.props.match.params.slug}`
@@ -41,7 +42,7 @@ export default class EditOutlet extends Component {
             }
           );
         } else {
-          console.log("outlet",res.data.data)
+          console.log("outlet", res.data.data);
           this.setState({ outlet: res.data.data[0].T_name });
         }
       })
@@ -61,7 +62,7 @@ export default class EditOutlet extends Component {
     let data = {
       outlet: this.state.outlet
     };
-    console.log("update outlet",data)
+    console.log("update outlet", data);
     const { errors, isValid } = validateOutlet(data);
     if (isValid) {
       await axios
@@ -100,6 +101,7 @@ export default class EditOutlet extends Component {
     } else {
       this.setState({ errors });
     }
+    this.props.history.push(Routes.MANAGE_OUTLET);
   };
   render() {
     let { errors } = this.state;
@@ -175,6 +177,6 @@ export default class EditOutlet extends Component {
           />
         </>
       );
-    return<>{display}</>;
+    return <>{display}</>;
   }
 }

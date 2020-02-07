@@ -6,6 +6,7 @@ import Spinner from "../../UI/Spinner/Spinner";
 import { withRouter } from "react-router-dom";
 import Routes from "../../config/Route";
 import validateOutlet from "../../Validation/Admin/OutletValidation";
+
 import Modal from "../../UI/Modal/messageModal";
 import Navbar from '../Navbar'
 class AddOutlet extends Component {

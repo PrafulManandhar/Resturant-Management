@@ -2,12 +2,13 @@ const Validator = require("validator");
 const isEmpty = require("./isEmpty");
 
 module.exports = function MenuValidation(data) {
+  console.log("data in server side validation",data)
   let errors = {};
   data.MName = !isEmpty(data.MName) ? data.MName : "";
   if (Validator.isEmpty(data.MName)) errors.MName = "Menu Name is required";
 
-  data.price = !isEmpty(data.price) ? data.price : "";
-  if (Validator.isEmpty(data.price)) errors.price = "Price is required";
+  // data.Price = !isEmpty(data.Price) ? data.Price : "";
+  // if (Validator.isEmpty(data.Price)) errors.Price = "Price is required";
 
   data.MCategory = !isEmpty(data.MCategory) ? data.MCategory : "";
   if (Validator.isEmpty(data.MCategory))
