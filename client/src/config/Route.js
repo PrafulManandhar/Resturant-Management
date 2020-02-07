@@ -1,4 +1,7 @@
 export default{
+  //User Management
+    MAIN_LOGIN :"/",
+    DASHBOARD:"/main",
     // OUtlet ROUTE
     ADD_OUTLET:"/outlet/add",
     MANAGE_OUTLET:"/outlet/view",

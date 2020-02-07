@@ -15,8 +15,8 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 //Routes
-// const users = require("./routes/api/");
-// app.use("/api/users", users);
+const users = require("./routes/api/users");
+app.use("/api/users", users);
 // const utility = require("./routes/api/utility");
 // app.use("/api/utility", utility);
 // const shift = require("./routes/api/shift");

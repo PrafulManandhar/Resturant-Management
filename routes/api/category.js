@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Router = require("../../config/Router");
-const Errors = require("../../config/message").Errors;
-const Success = require("../../config/message").Success;
+const Errors = require("../../config/messages").Errors;
+const Success = require("../../config/messages").Success;
 // const databaseUtility = require("../../utility/databaseUtility");
 // var moment = require("moment""");
 // const databaseUtility = require("../../utility/databaseUtility");

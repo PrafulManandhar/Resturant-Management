@@ -4,18 +4,18 @@ const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 const passport = require("passport");
 const bcrypt = require("bcryptjs");
-const validateLogin = require("../../validator/validateLogin");
-const validateAddUser = require("../../validator/validateAddUser.js");
-const validateAddCustomer = require("../..//validator/validateAddCustomer.js");
-const validateUpdateUser = require("../../validator/validateUpdateUser.js");
-const validateUpdatePassword = require("../../validator/validateUpdatePassword.js");
-const validatePassword = require("../../validator/validatePassword.js");
+const validateLogin = require("../../Validation/LoginValidation");
+// const validateAddUser = require("../../validator/validateAddUser.js");
+// const validateAddCustomer = require("../..//validator/validateAddCustomer.js");
+// const validateUpdateUser = require("../../validator/validateUpdateUser.js");
+// const validateUpdatePassword = require("../../validator/validateUpdatePassword.js");
+// const validatePassword = require("../../validator/validatePassword.js");
 const Roles = require("../../config/roles");
 const SLUGS = require("../..//config/slugs");
 const DYNAMIC_LEGENDS = require("../../config/legends");
 const SHIFTS = require("../../config/shifts");
 const Globals = require("../../config/global");
-const ResetValidation = require("../../validator/resetValidation");
+// const ResetValidation = require("../../validator/resetValidation");
 const databaseUtility = require("../../utility/databaseUtility");
 const checkPermission = require("../../utility/checkPermission");
 const pool = require("../../config/pool").pool;
@@ -234,6 +234,7 @@ FROM user_table WHERE
     })
     .catch(err => {});
 };
+//login 
 login = async (email, password, ip) => {
   let statement =
     "SELECT user_password,user_status FROM user_table WHERE email=?";
@@ -625,8 +626,11 @@ router.post("/login", async (req, res) => {
   const { errors, isValid } = validateLogin(req.body);
   //Check Validation
   if (!isValid) {
+
     return res.status(400).json({ errors });
   }
+  console.log("login api")
+
   let { email, password, ip } = req.body;
 
   try {
