@@ -4,7 +4,9 @@ import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "./Action/loginAction";
 import { withRouter } from "react-router-dom";
-
+import AddUser from './Components/Users/AddUser';
+import EditUser from './Components/Users/EditUser';
+import ViewUser from './Components/Users/ViewUser';
 import Dashboard from "./Components/Dashboard";
 import AddOutlet from "./Components/Outlet/AddOutlet";
 import ViewOutlet from "./Components/Outlet/ViewOutlet";
@@ -30,6 +32,16 @@ class App extends Component {
           path={Routes.DASHBOARD}
           exact
           render={() => (this.props.loginData.login ? <Dashboard /> : <CustomSpinner />)}
+        />
+         <Route
+          path={Routes.ADD_USER}
+          exact
+          render={() => (this.props.loginData.login ? <AddUser /> : <CustomSpinner />)}
+        />
+         <Route
+          path={Routes.ViewUser}
+          exact
+          render={() => (this.props.loginData.login ? <ViewUser /> : <CustomSpinner />)}
         />
         {/* <Route path="/dashboard" component={Dashboard} exact /> */}
         <Route path="/outlet/add" component={AddOutlet} exact />

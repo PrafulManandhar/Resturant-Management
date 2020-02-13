@@ -7,7 +7,7 @@ const Actions = require("../../config/messages").Actions;
 const Errors = require("../../config/messages").Errors;
 const Success = require("../../config/messages").Success;
 const databaseUtility = require("../../utility/databaseUtility");
-const validateUpdateTemplate = require("../../validator/utility/validateUpdateTemplate");
+const validateUpdateTemplate = require("../../validation/utility/validateUpdateTemplate");
 const checkPermission = require("../../utility/checkPermission");
 
 getEmailTemplate = async hook => {
@@ -44,6 +44,7 @@ router.get(
   "/add",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    console.log("api/utility")
     // Only Admin and Super Admin have privilege to access utility
     if (req.user.role === 4) {
       res.json({

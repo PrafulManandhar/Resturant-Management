@@ -5,8 +5,8 @@ const mailConfig = {
   secure: false,
   port: 25,
   auth: {
-    user: "prabinmanandhar20@gmail.com",
-    pass: "egodarkfallqwerty"
+    user: "thisisjustdummysaurav@gmail.com",
+    pass: "TestNepalAdhikari22-"
   },
   tls: {
     rejectUnauthorized: false

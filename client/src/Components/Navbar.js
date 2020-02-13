@@ -72,6 +72,20 @@ class Navbars extends Component {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
+            <NavDropdown title="Manage User" id="basic-nav-dropdown">
+                <NavDropdown.Item>
+                  {" "}
+                  <NavLink to="/user/add" className="navbar-button">
+                    Add User
+                  </NavLink>
+                </NavDropdown.Item>
+                <NavDropdown.Item>
+                  {" "}
+                  <NavLink to="/user/view" className="navbar-button">
+                    View User
+                  </NavLink>
+                </NavDropdown.Item>
+              </NavDropdown>
               <NavDropdown title="Outlet" id="basic-nav-dropdown">
                 <NavDropdown.Item>
                   {" "}

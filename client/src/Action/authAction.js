@@ -1,5 +1,5 @@
 export const auth=(data)=>({
-    type="AUTH",
+    type:"AUTH",
     payload:data
 })
 export const authLogout=()=>({
