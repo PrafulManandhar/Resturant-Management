@@ -45,7 +45,7 @@ app.use("/api/utility", utility);
 const category=require("./routes/api/category");
 app.use("/api/category",category);
 
-// const menu=require("./routes/api/Menu");
-// app.use("/api/Menu",menu);
+const menu=require("./routes/api/Menu");
+app.use("/api/Menu",menu);
 
 module.exports = app;

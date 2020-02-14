@@ -51,7 +51,7 @@ router.post(Router.ADD_CATEGORY, async (req, res) => {
 
 router.get(Router.MANAGE_CATEGORIES, async (req, res) => {
   let Statement = "SELECT C_id AS id , C_name AS cnames from category";
-
+console.log("categoriry get")
   return await pool
     .execute(Statement)
     .then(results => {
