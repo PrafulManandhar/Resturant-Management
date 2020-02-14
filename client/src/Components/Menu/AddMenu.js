@@ -86,7 +86,7 @@ export default class AddMenu extends Component {
           }
         })
         .catch(err => {
-          alert("ERRR");
+          alert("ERRR",err);
 
           this.setState({ errors: err.response.data.errors }, () => {
             console.log(this.state.errors);

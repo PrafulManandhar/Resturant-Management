@@ -99,7 +99,10 @@ const Actions = {
       "Successuly added the recived quantity to the database",
     RECIVED_PURCHASED_ORDERED_FAILED:
       "Failed to add the recived quantity to the database",
-      ADD_QUIZ_QUESTION_FAILED: "Failed to add new Question "
+      ADD_QUIZ_QUESTION_FAILED: "Failed to add new Question ",
+      ADD_MENU :"New Menu has been Failed Created",
+      EDIT_MENU :"Menu Failed Updated",
+      DELETE_MENU : "Menu Failed Deleted",
   
   };
 const Success ={
@@ -162,6 +165,8 @@ const Errors ={
     ADD_CATEGORY:"Something went wrong while creating new CATEGORY",
     EDIT_CATEGORY:"Failed to update the CATEGORY",
     DELETE_CATEGORY:"Failed to delete the CATEGORY",
+    DELETE_CATEGORY_FORGIEN:"Cannot delete the Category beacause this category is used in menu items",
+
     VIEW_CATEGORY:"Failed to load the category",
      ADD_MENU :"Something went wrong while creating new Menu",
     EDIT_MENU :"Failed to update the Menu",
@@ -240,7 +245,9 @@ const Errors ={
     DELETE_PURCHASE_ORDER_DRAFT_FAILED: "Failed to delete purchase draft.",
     UPDATE_DRAFT_TO_ISSUED_FALIED:
       "Failed to updated purchase draft  order to issued ",
-      ADD_QUIZ_QUESTION_FAILED: "Failed to add new Question "
+      ADD_QUIZ_QUESTION_FAILED: "Failed to add new Question ",
+      GET_MENU:"Failed to fetch menu data"
+
 }
 
 exports.Success = Success;

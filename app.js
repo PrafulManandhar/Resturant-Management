@@ -17,8 +17,8 @@ require("./config/passport")(passport);
 //Routes
 const users = require("./routes/api/users");
 app.use("/api/users", users);
-// const utility = require("./routes/api/utility");
-// app.use("/api/utility", utility);
+const utility = require("./routes/api/utility");
+app.use("/api/utility", utility);
 // const shift = require("./routes/api/shift");
 // app.use("/api/shift", shift);
 
@@ -45,7 +45,7 @@ app.use("/api/users", users);
 const category=require("./routes/api/category");
 app.use("/api/category",category);
 
-// const menu=require("./routes/api/Menu");
-// app.use("/api/Menu",menu);
+const menu=require("./routes/api/Menu");
+app.use("/api/Menu",menu);
 
 module.exports = app;

@@ -64,16 +64,14 @@ export default class ViewCategory extends Component {
               alertVariant: "success",
               errors: ""
             },
-           async () => {
+            async () => {
               this.showAlerts();
-             
             }
           );
           this.setState({ loading: true });
           await this.loadData();
           await this.loadTable();
           this.setState({ loading: false });
-
         }
       })
       .catch(err => {
@@ -83,14 +81,27 @@ export default class ViewCategory extends Component {
     this.setState({ confirmShow: false });
   };
 
-  loadData =async()=>{
+  loadData = async () => {
     await Axios.get("http://localhost:5000/api/category/categories")
       .then(res => {
         console.log(res);
-        this.setState({ data: res.data.data });
+        if (res.data.type === "error") {
+          this.setState(
+            {
+              message: res.data.message,
+              alertVariant: "danger",
+              errors: ""
+            },
+            () => {
+              this.showAlerts();
+            }
+          );
+        } else {
+          this.setState({ data: res.data.data });
+        }
       })
       .catch(err => console.log("err", err));
-  }
+  };
 
   editHandler = e => {
     let slug = e.target.id;
@@ -98,7 +109,7 @@ export default class ViewCategory extends Component {
   };
   deleteHandler = e => {
     let slug = e.target.id;
-    console.log("deleteHandler",slug);
+    console.log("deleteHandler", slug);
 
     this.setState({ confirmShow: true, deletingId: slug });
   };
@@ -113,19 +124,12 @@ export default class ViewCategory extends Component {
     this.setState({ show: false });
   };
   componentDidMount = async () => {
-    await Axios.get("http://localhost:5000/api/category/categories")
-      .then(res => {
-        console.log(res);
-        this.setState({ data: res.data.data });
-      })
-      .catch(err => console.log("err", err));
-
-      this.loadTable();
-   
+   await this.loadData();
+    this.loadTable();
     this.setState({ loading: false });
   };
 
-  loadTable = () =>{
+  loadTable = () => {
     let i = 0;
     dataTableData.rows = [];
     for (let record of this.state.data) {
@@ -160,7 +164,7 @@ export default class ViewCategory extends Component {
         )
       });
     }
-  }
+  };
 
   render() {
     let display = <Spinner />;

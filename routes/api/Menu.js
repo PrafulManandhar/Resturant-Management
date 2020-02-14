@@ -1,14 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const mysql = require("mysql");
+// const mysql = require("mysql");
 const Router = require("../../config/Router");
 const Errors = require("../../config/messages").Errors;
 const Success = require("../../config/messages").Success;
 const ValidateMenu =require("../../Validation/MenuValidation");
-const databaseOptions = require("../../config/database");
-const mysqlConnection = mysql.createConnection(databaseOptions);
+// const databaseOptions = require("../../config/database");
+// const mysqlConnection = mysql.createConnection(databaseOptions);
+const pool = require("../../config/pool").pool;
+
 //Connect to database
-mysqlConnection.connect();
+// mysqlConnection.connect();
 
 //@route GET api/users/test
 //@desc  Test users route
@@ -19,7 +21,7 @@ router.get("/test", (req, res) => res.json({ hi: "hello" }));
 
 //Add new Menu
 //Method : Post
-router.post(Router.ADD_MENU, (req, res) => {
+router.post(Router.ADD_MENU, async(req, res) => {
   let { MName, MCategory, Price, MStatus, Cost_Price, Description } = req.body;
   Cost_Price = Cost_Price ? Cost_Price : 0;
   Description = Description ? Description : "";
@@ -27,14 +29,17 @@ router.post(Router.ADD_MENU, (req, res) => {
   let {errors,isValid} = ValidateMenu(req.body);
   if(isValid){
     let Statement = "INSERT INTO menu (M_name, M_status, M_category, Price , cost_price , description) VALUES (?,?,?,?,?,?)";
-  
-    mysqlConnection.query(Statement, [MName,MStatus,MCategory,Price,Cost_Price,Description], (err, results) => {
-      console.log("results", err);
-      if (!err && results.affectedRows>0) {
+    
+    return await pool.execute(Statement,[MName,MStatus,MCategory,Price,Cost_Price,Description]).then(result=>{
+      if(result[0].affectedRows>0){
         res.json({ type: "success", message: Success.ADD_MENU });
-      } else {
+
+      }else{
         res.json({ type: "error", message: Errors.ADD_MENU });
+
       }
+    }).catch(err=>{
+      console.log("error in adding the menu",err)
     })
   }else{
       res.json({errors})
@@ -44,17 +49,23 @@ router.post(Router.ADD_MENU, (req, res) => {
 
 //Get all the menu for Viewing 
 //Method Post 
-router.get(Router.MANAGE_MENU, (req, res) => {
+router.get(Router.MANAGE_MENU, async(req, res) => {
   let Statement = "SELECT M_id AS M_id , M_name AS MName ,M_status AS MStatus ,M_category AS MCategory, Price AS Price , cost_price AS CPrice , description AS Decsription from menu";
 
-  mysqlConnection.query(Statement, (err, results) => {
-    console.log("results", results);
-    if (!err) {
-      res.json({ type: "success", data: results });
-    } else {
-      res.json({ type: "error", message: Errors.VIEW_MENU });
+  return await pool.execute(Statement).then(results=>{
+    console.log("results",results[0].length)
+    if(results[0].length){
+      res.json({type:"success" , data:results[0]})
+    }else{
+      res.json({type:"error" , message:Errors.GET_MENU})
+
     }
-  });
+  }).catch(err=>{
+    console.log("error in getting the menu",err)
+
+    res.json({type:"error" , message:Errors.GET_MENU})
+
+  })
 });
 
 //GET OUTLET FROM ID
@@ -114,7 +125,7 @@ router.put(Router.UPDATE_MENU, (req, res) => {
 });
 
 //Delete OUTLET FROM ID
-router.delete(Router.DELETE_MENU, (req, res) => {
+router.delete(Router.DELETE_MENU, async(req, res) => {
   console.log("react")
   let slug = req.params.slug;
   console.log(slug);
@@ -123,14 +134,20 @@ router.delete(Router.DELETE_MENU, (req, res) => {
   }
   let statement = "Delete FROM menu WHERE M_id=?";
 
-  mysqlConnection.query(statement, [slug], (err, result) => {
-    console.log("affected", result.affectedRows);
-    if (!err && result.affectedRows > 0) {
+  return await pool.execute(statement,[slug]).then(results=>{
+    if(results[0].affectedRows>0){
       res.json({ type: "success", message: Success.DELETE_MENU });
-    } else {
+
+    }else{
       res.json({ type: "error", message: Errors.DELETE_MENU });
+
     }
-  });
+  }).catch(err=>{
+    console.log("error in deleting the menu idem");
+    res.json({ type: "error", message: Errors.DELETE_MENU });
+
+  })
+  
 });
 
 module.exports = router;

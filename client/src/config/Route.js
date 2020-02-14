@@ -2,6 +2,9 @@ export default{
   //User Management
     MAIN_LOGIN :"/",
     DASHBOARD:"/main",
+    UNAUTHORISED:"/unauthorised",
+    ADD_USER:"/user/add",
+    VIEW_USER:"/user/view",
     // OUtlet ROUTE
     ADD_OUTLET:"/outlet/add",
     MANAGE_OUTLET:"/outlet/view",

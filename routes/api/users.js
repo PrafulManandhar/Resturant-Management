@@ -5,7 +5,7 @@ const keys = require("../../config/keys");
 const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const validateLogin = require("../../Validation/LoginValidation");
-// const validateAddUser = require("../../validator/validateAddUser.js");
+const validateAddUser = require("../../validation/validateAddUser.js");
 // const validateAddCustomer = require("../..//validator/validateAddCustomer.js");
 // const validateUpdateUser = require("../../validator/validateUpdateUser.js");
 // const validateUpdatePassword = require("../../validator/validateUpdatePassword.js");
@@ -379,7 +379,7 @@ editUser = async user => {
 
 addUser = async newUser => {
   let statement =
-    "INSERT INTO user_table (first_name,middle_name,last_name,email,user_password,address,phone,mobile,country,shift,type_id) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
+    "INSERT INTO user_table (first_name,middle_name,last_name,email,user_password,address,phone,mobile,country,type_id) VALUES (?,?,?,?,?,?,?,?,?,?);";
   // Generate salt and hash it
   let salt = await bcrypt.genSalt(8);
   newUser.password = await bcrypt.hash(newUser.password, salt);
@@ -394,7 +394,6 @@ addUser = async newUser => {
       newUser.phone,
       newUser.mobile,
       newUser.country,
-      newUser.shift,
       newUser.userType
     ])
     .then(result => {
@@ -728,13 +727,14 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    console.log("api/users/")
     let isAuthorized = await checkPermission(req.user.id, SLUGS.ADD_USER);
-    if (!isAuthorized) {
-      return res.json({
-        type: "error",
-        message: Errors.UNAUTHORIZED
-      });
-    } else {
+    // if (!isAuthorized) {
+    //   return res.json({
+    //     type: "error",
+    //     message: Errors.UNAUTHORIZED
+    //   });
+    // } else {
       const { errors, isValid } = validateAddUser(req.body);
       if (!isValid) {
         return res.status(400).json({ errors });
@@ -751,7 +751,6 @@ router.post(
         mobile: req.body.mobile,
         country: req.body.country,
         userType: req.body.userType,
-        shift: req.body.shift
       };
       let { email, ip } = req.body;
       newUser.userType = Roles[newUser.userType.toUpperCase()];
@@ -821,7 +820,7 @@ router.post(
           ip
         );
       }
-    }
+    
   }
 );
 // @route PUT api/users/
