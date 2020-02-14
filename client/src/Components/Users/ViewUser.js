@@ -1,103 +1,215 @@
 import React, { Component } from "react";
-import axios from "axios";
-import { Table, Button, Spinner } from "react-bootstrap";
-import { connect } from "react-redux";
-import "./ViewUser.css";
-class ViewUser extends Component {
+import { MDBDataTable } from "mdbreact";
+import Axios from "axios";
+import Navbar from "../Navbar";
+import Spinner from "../../UI/Spinner/Spinner";
+import { Col, Card, Container, Row } from "react-bootstrap";
+import { Router } from "react-router-dom";
+import Routes from "../../config/Route";
+import ConfirmationModal from "../../UI/Modal/confirmationModal";
+import Modal from "../../UI/Modal/messageModal";
+
+const dataTableData = {
+  columns: [
+    {
+      label: "C-id",
+      field: "cid",
+      sort: "asc"
+    },
+    {
+      label: "Category Name",
+      field: "cname",
+      sort: "asc"
+    },
+    {
+      label: "Action",
+      field: "action",
+      sort: "asc"
+    }
+  ],
+  rows: []
+};
+
+export default class ViewCategory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userinfo: null,
-      role: this.props.auth.user.role,
-      userId: props.id
+      data: "",
+      loading: true,
+      confirmShow: false,
+      deletingId: "",
+      show: false
     };
   }
-  componentDidMount = async () => {
-    await axios
-      .get(`http://localhost:5000/api/users/${this.state.userId}`)
-      .then(res => {
-        this.setState({
-          userinfo: res.data[0]
-        });
+  deleteCategory = async () => {
+    await Axios.delete(
+      `http://localhost:5000/api/category/category/${this.state.deletingId}`
+    )
+      .then(async res => {
+        if (res.data.type === "error") {
+          this.setState(
+            {
+              message: res.data.message,
+              alertVariant: "danger",
+              errors: ""
+            },
+            () => {
+              this.showAlerts();
+            }
+          );
+        } else {
+          this.setState(
+            {
+              message: res.data.message,
+              alertVariant: "success",
+              errors: ""
+            },
+           async () => {
+              this.showAlerts();
+             
+            }
+          );
+          this.setState({ loading: true });
+          await this.loadData();
+          await this.loadTable();
+          this.setState({ loading: false });
+
+        }
       })
-      .catch(err => {});
+      .catch(err => {
+        console.log("eror in delete Category", err);
+      });
+
+    this.setState({ confirmShow: false });
   };
-  closeHandler = async () => {
-    axios
-      .delete(`http://localhost:5000/api/users/${this.state.userId}`)
-      .then(res => {})
-      .catch(err => {});
+
+  loadData =async()=>{
+    await Axios.get("http://localhost:5000/api/category/categories")
+      .then(res => {
+        console.log(res);
+        this.setState({ data: res.data.data });
+      })
+      .catch(err => console.log("err", err));
+  }
+
+  editHandler = e => {
+    let slug = e.target.id;
+    this.props.history.push(`${Routes.EDIT_CATEGORY}/${slug}`);
   };
+  deleteHandler = e => {
+    let slug = e.target.id;
+    console.log("deleteHandler",slug);
+
+    this.setState({ confirmShow: true, deletingId: slug });
+  };
+
+  confirmModalClose = () => {
+    this.setState({ confirmShow: false });
+  };
+  showAlerts = () => {
+    this.setState({ show: true });
+  };
+  modalClose = () => {
+    this.setState({ show: false });
+  };
+  componentDidMount = async () => {
+    await Axios.get("http://localhost:5000/api/category/categories")
+      .then(res => {
+        console.log(res);
+        this.setState({ data: res.data.data });
+      })
+      .catch(err => console.log("err", err));
+
+      this.loadTable();
+   
+    this.setState({ loading: false });
+  };
+
+  loadTable = () =>{
+    let i = 0;
+    dataTableData.rows = [];
+    for (let record of this.state.data) {
+      i++;
+      dataTableData.rows.push({
+        cid: record.id,
+        cname: record.cnames,
+        action: (
+          <div>
+            <button
+              className="btn btn-outline-primary"
+              id={record.id}
+              onClick={this.editHandler}
+            >
+              Edit
+            </button>
+            <button
+              className="btn btn-outline-success"
+              id={record.id}
+              onClick={this.viewHandler}
+            >
+              View
+            </button>
+            <button
+              className="btn btn-outline-danger"
+              id={record.id}
+              onClick={this.deleteHandler}
+            >
+              Delete
+            </button>
+          </div>
+        )
+      });
+    }
+  }
+
   render() {
-    let role = this.state.role;
-    let disableButton;
-    if (role === 3) {
-      disableButton = (
-        <Button variant="outline-danger" onClick={this.closeHandler}>
-          Close Account
-        </Button>
+    let display = <Spinner />;
+    if (!this.state.loading) {
+      display = (
+        <>
+          <Navbar />
+          <section
+            className="d-flex"
+            style={{ position: "relative", width: "100vw" }}
+          >
+            <Container
+              fluid
+              style={{ margin: "0", padding: "0", background: "#eeeeee" }}
+            >
+              <Row noGutters>
+                <Col className="p-3 m-2">
+                  <h2>View Category</h2>
+                  <hr />
+                  <Card>
+                    <Card.Body>
+                      <MDBDataTable
+                        responsive
+                        striped
+                        hover
+                        data={dataTableData}
+                        searching={true}
+                      />
+                    </Card.Body>
+                  </Card>{" "}
+                </Col>
+              </Row>
+            </Container>
+            <ConfirmationModal
+              show={this.state.confirmShow}
+              close={this.confirmModalClose}
+              type="Category"
+              Confirmdelete={this.deleteCategory}
+            />
+            <Modal
+              show={this.state.show}
+              close={this.modalClose}
+              variant={this.state.alertVariant}
+              message={this.state.message}
+            />
+          </section>
+        </>
       );
     }
-
-    let userInfo = <Spinner />;
-    if (this.state.userinfo)
-      userInfo = (
-        <Table style={{color:"#000"}} className="viewTable" striped bordered hover>
-          <tbody>
-            <tr>
-              <td>Name</td>
-              <td>
-                {this.state.userinfo.firstname +
-                  " " +
-                  this.state.userinfo.middlename +
-                  " " +
-                  this.state.userinfo.lastname}
-              </td>
-            </tr>
-            <tr>
-              <td>Email</td>
-              <td>{this.state.userinfo.email}</td>
-            </tr>
-            <tr>
-              <td>User Status</td>
-              <td>{this.state.userinfo.userStatus}</td>
-            </tr>
-            <tr>
-              <td>Address</td>
-              <td>{this.state.userinfo.address}</td>
-            </tr>
-            <tr>
-              <td>Country</td>
-              <td>{this.state.userinfo.country}</td>
-            </tr>
-            <tr>
-              <td>Phone</td>
-              <td>{this.state.userinfo.phone}</td>
-            </tr>
-            <tr>
-              <td>Mobile</td>
-              <td>{this.state.userinfo.mobile}</td>
-            </tr>
-            <tr>
-              <td>Registration Date</td>
-              <td>{this.state.userinfo.registration_date.split("T")[0]}</td>
-            </tr>
-            <tr>
-              <td>Login Status</td>
-              <td>{this.state.userinfo.login_status}</td>
-            </tr>
-            <tr>
-              <td>Last Login Ip</td>
-              <td>{this.state.userinfo.last_login_ip}</td>
-            </tr>
-          </tbody>
-        </Table>
-      );
-
-    return <>{userInfo}</>;
+    return <>{display}</>;
   }
 }
-const mapStateToProps = state => ({
-  auth: state.auth
-});
-export default connect(mapStateToProps)(ViewUser);

@@ -17,7 +17,7 @@ router.get("/test", (req, res) => res.json({ hi: "hello" }));
 //addCategory
 
 addCategory = async ({ category }) => {
-  console.log("addCateroga ",category)
+  console.log("addCateroga ", category);
   let Statement = "INSERT INTO category (C_name) VALUES (?)";
   return pool
     .execute(Statement, [category])
@@ -33,8 +33,7 @@ addCategory = async ({ category }) => {
 
 router.post(Router.ADD_CATEGORY, async (req, res) => {
   let category = req.body.category;
-  console.log("addCategory",category)
-
+  console.log("addCategory", category);
 
   let { categoryAdded, err } = await addCategory({ category });
   if (categoryAdded) {
@@ -50,17 +49,20 @@ router.post(Router.ADD_CATEGORY, async (req, res) => {
   }
 });
 
-router.get(Router.MANAGE_CATEGORIES, (req, res) => {
+router.get(Router.MANAGE_CATEGORIES, async (req, res) => {
   let Statement = "SELECT C_id AS id , C_name AS cnames from category";
 
-  mysqlConnection.query(Statement, (err, results) => {
-    console.log("results", results);
-    if (!err) {
-      res.json({ type: "success", data: results });
-    } else {
+  return await pool
+    .execute(Statement)
+    .then(results => {
+      console.log("results", results);
+
+      res.json({ type: "success", data: results[0] });
+    })
+    .catch(err => {
+      console.log("error in view category", err);
       res.json({ type: "error", message: Errors.VIEW_CATEGORY });
-    }
-  });
+    });
 });
 
 //GET OUTLET FROM ID
@@ -70,7 +72,7 @@ router.get(Router.GET_CATEGORY, (req, res) => {
   if (!slug) {
     return res.json({ type: "error", message: "Failed to load category" });
   }
-  
+
   let statement = "SELECT C_name FROM category WHERE C_id=?";
 
   mysqlConnection.query(statement, slug, (err, result) => {

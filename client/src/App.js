@@ -39,7 +39,7 @@ class App extends Component {
           render={() => (this.props.loginData.login ? <AddUser /> : <CustomSpinner />)}
         />
          <Route
-          path={Routes.ViewUser}
+          path={Routes.VIEW_USER}
           exact
           render={() => (this.props.loginData.login ? <ViewUser /> : <CustomSpinner />)}
         />
