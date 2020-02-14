@@ -125,7 +125,7 @@ router.put(Router.UPDATE_MENU, (req, res) => {
 });
 
 //Delete OUTLET FROM ID
-router.delete(Router.DELETE_MENU, (req, res) => {
+router.delete(Router.DELETE_MENU, async(req, res) => {
   console.log("react")
   let slug = req.params.slug;
   console.log(slug);
@@ -134,14 +134,20 @@ router.delete(Router.DELETE_MENU, (req, res) => {
   }
   let statement = "Delete FROM menu WHERE M_id=?";
 
-  mysqlConnection.query(statement, [slug], (err, result) => {
-    console.log("affected", result.affectedRows);
-    if (!err && result.affectedRows > 0) {
+  return await pool.execute(statement,[slug]).then(results=>{
+    if(results[0].affectedRows>0){
       res.json({ type: "success", message: Success.DELETE_MENU });
-    } else {
+
+    }else{
       res.json({ type: "error", message: Errors.DELETE_MENU });
+
     }
-  });
+  }).catch(err=>{
+    console.log("error in deleting the menu idem");
+    res.json({ type: "error", message: Errors.DELETE_MENU });
+
+  })
+  
 });
 
 module.exports = router;
