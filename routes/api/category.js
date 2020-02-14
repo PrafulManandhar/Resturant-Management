@@ -107,7 +107,7 @@ router.put(Router.UPDATE_CATEGORY, (req, res) => {
 });
 
 //Delete OUTLET FROM ID
-router.delete(Router.DELETE_CATEGORY, (req, res) => {
+router.delete(Router.DELETE_CATEGORY, async(req, res) => {
   let slug = req.params.slug;
   console.log(slug);
   if (!slug) {
@@ -115,14 +115,16 @@ router.delete(Router.DELETE_CATEGORY, (req, res) => {
   }
   let statement = "Delete FROM category WHERE C_id=?";
 
-  mysqlConnection.query(statement, [slug], (err, result) => {
-    console.log("affected");
-    if (!err) {
-      res.json({ type: "success", message: Success.DELETE_CATEGORY });
-    } else {
-      res.json({ type: "error", message: Errors.DELETE_CATEGORY });
+  return await pool.execute(statement,[slug]).then(results=>{
+    console.log(results)
+    if(results[0].affectedRows>0){
+      res.json({type:"success", message:Success.DELETE_CATEGORY})
     }
-  });
+  }).catch(err=>{
+    console.log("error in deleteing the category",err)
+    res.json({ type: "error", message: Errors.DELETE_CATEGORY_FORGIEN });
+
+  })
 });
 
 module.exports = router;

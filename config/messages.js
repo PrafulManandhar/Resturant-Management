@@ -162,6 +162,8 @@ const Errors ={
     ADD_CATEGORY:"Something went wrong while creating new CATEGORY",
     EDIT_CATEGORY:"Failed to update the CATEGORY",
     DELETE_CATEGORY:"Failed to delete the CATEGORY",
+    DELETE_CATEGORY_FORGIEN:"Cannot delete the Category beacause this category is used in menu items",
+
     VIEW_CATEGORY:"Failed to load the category",
      ADD_MENU :"Something went wrong while creating new Menu",
     EDIT_MENU :"Failed to update the Menu",
