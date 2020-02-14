@@ -19,5 +19,8 @@ export default{
       // Menu ROUTE
     ADD_MENU:"/menu/add",
     MANAGE_MENU:"/menu/view",
-    EDIT_MENU:"/menu/edit"
+    EDIT_MENU:"/menu/edit",
+
+    //FrontDesk
+    GET_ORDER_LIST:"front-desk/show"
 }

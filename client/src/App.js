@@ -53,6 +53,12 @@ class App extends Component {
         <Route path="/menu/add" component={AddMenu} exact />
         <Route path="/menu/view" component={ViewMenu} exact />
         <Route path="/menu/edit/:slug" component={EditMenu} exact />
+        {/* <Route
+          path={Routes.GET_ORDER_LIST}
+          exact
+          render={() => (this.props.loginData.login ? <ViewUser /> : <CustomSpinner />)}
+        /> */}
+        
       </Switch>
     );
   }

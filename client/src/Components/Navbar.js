@@ -143,7 +143,7 @@ class Navbars extends Component {
             <NavDropdown title="Front" id="basic-nav-dropdown">
               <NavDropdown.Item>
                 {" "}
-                <NavLink to="/outlet/add" className="navbar-button">
+                <NavLink to="/front-desk/show" className="navbar-button">
                   Front Desk
                 </NavLink>
               </NavDropdown.Item>
