@@ -49,17 +49,23 @@ router.post(Router.ADD_MENU, async(req, res) => {
 
 //Get all the menu for Viewing 
 //Method Post 
-router.get(Router.MANAGE_MENU, (req, res) => {
+router.get(Router.MANAGE_MENU, async(req, res) => {
   let Statement = "SELECT M_id AS M_id , M_name AS MName ,M_status AS MStatus ,M_category AS MCategory, Price AS Price , cost_price AS CPrice , description AS Decsription from menu";
 
-  mysqlConnection.query(Statement, (err, results) => {
-    console.log("results", results);
-    if (!err) {
-      res.json({ type: "success", data: results });
-    } else {
-      res.json({ type: "error", message: Errors.VIEW_MENU });
+  return await pool.execute(Statement).then(results=>{
+    console.log("results",results[0].length)
+    if(results[0].length){
+      res.json({type:"success" , data:results[0]})
+    }else{
+      res.json({type:"error" , message:Errors.GET_MENU})
+
     }
-  });
+  }).catch(err=>{
+    console.log("error in getting the menu",err)
+
+    res.json({type:"error" , message:Errors.GET_MENU})
+
+  })
 });
 
 //GET OUTLET FROM ID

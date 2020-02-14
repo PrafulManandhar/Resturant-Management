@@ -110,20 +110,25 @@ export default class ViewMenu extends Component {
   loadData = async () => {
     await Axios.get("http://localhost:5000/api/Menu/menu")
       .then(res => {
-        console.log(res);
+        console.log("loadData",res);
         if (res.data.type === "success") {
-          this.setState({ 
-            data: res.data.data });
-        } else if (res.data.type === "error") {
           this.setState({
-            message: res.data.message,
-            alertVariant: "danger",
-            errors: ""
-          },()=>{
-            this.showAlerts()
+            data: res.data.data
           });
+        } else if (res.data.type === "error") {
+
+          console.log("error",res.data.message)
+          this.setState(
+            {
+              message: res.data.message,
+              alertVariant: "danger",
+              errors: ""
+            },
+            () => {
+              this.showAlerts();
+            }
+          );
         }
-        this.setState({ data: res.data.data });
       })
       .catch(err => console.log("err", err));
   };
@@ -150,15 +155,8 @@ export default class ViewMenu extends Component {
     this.setState({ show: false });
   };
   componentDidMount = async () => {
-    await Axios.get("http://localhost:5000/api/Menu/menu")
-      .then(res => {
-        console.log(res);
-        this.setState({ data: res.data.data });
-      })
-      .catch(err => console.log("err", err));
-
+    await this.loadData();
     this.loadTable();
-
     this.setState({ loading: false });
   };
 
