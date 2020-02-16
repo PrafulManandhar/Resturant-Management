@@ -42,11 +42,6 @@ const dataTableData = {
       sort: "asc"
     },
     {
-      label: "Description",
-      field: "description",
-      sort: "asc"
-    },
-    {
       label: "Action",
       field: "action",
       sort: "asc"
@@ -173,7 +168,6 @@ export default class ViewMenu extends Component {
         mstatus: record.MStatus,
         price: record.Price,
         cprice: record.CPrice,
-        description: record.Decsription,
         action: (
           <div>
             <button
