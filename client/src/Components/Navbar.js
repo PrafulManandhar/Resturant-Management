@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { NavLink , withRouter} from "react-router-dom";
-import Img from '../Image/profile.jpg'
+import { NavLink, withRouter } from "react-router-dom";
+import Img from "../Image/profile.jpg";
 import { logout } from "../Action/loginAction";
 import axios from "axios";
 import getIp from "../Utility/getIp";
 import { connect } from "react-redux";
+import CustomName from '../config/CustomName';
 
 import {
   Nav,
@@ -23,14 +24,17 @@ class Navbars extends Component {
     navItem: "admin",
     ip: null,
     message: "",
-    show: false,
+    show: false
   };
   componentDidMount = async () => {
     this.setState({ ip: await getIp() });
-  }
+  };
   logout = () => {
     axios
-      .post("http://localhost:5000/api/users/logout", { ip: this.state.ip, email: this.state.email })
+      .post("http://localhost:5000/api/users/logout", {
+        ip: this.state.ip,
+        email: this.state.email
+      })
       .then(res => {
         if (res.data.type === "success") {
           this.setState({ message: res.data.message });
@@ -61,7 +65,7 @@ class Navbars extends Component {
   toggleSidebar = () => {
     document.querySelector("#accordionSidebar").classList.toggle("toggled");
   };
-  
+
   render() {
     const clickedItem = this.state.navItem;
     let navbarSecondary;
@@ -72,7 +76,7 @@ class Navbars extends Component {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-            <NavDropdown title="Manage User" id="basic-nav-dropdown">
+              <NavDropdown title="Manage User" id="basic-nav-dropdown">
                 <NavDropdown.Item>
                   {" "}
                   <NavLink to="/user/add" className="navbar-button">
@@ -131,55 +135,51 @@ class Navbars extends Component {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-     
       );
     } else if (clickedItem === "front") {
       navbarSecondary = (
         <Navbar bg="light" expand="lg">
-        <Navbar.Brand>Front</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-            <NavDropdown title="Front" id="basic-nav-dropdown">
-              <NavDropdown.Item>
-                {" "}
-                <NavLink to="/front-desk/show" className="navbar-button">
-                  Front Desk
-                </NavLink>
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-   
+          <Navbar.Brand>Front</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+              <NavDropdown title="Front" id="basic-nav-dropdown">
+                <NavDropdown.Item>
+                  {" "}
+                  <NavLink to="/frontdesk/show" className="navbar-button">
+                    Front Desk
+                  </NavLink>
+                </NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
       );
     } else if (clickedItem === "account") {
       navbarSecondary = (
         <Navbar bg="light" expand="lg">
-        <Navbar.Brand>Account</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-            <NavDropdown title="Account" id="basic-nav-dropdown">
-              <NavDropdown.Item>
-                {" "}
-                <NavLink to="/outlet/add" className="navbar-button">
-                  View Today Sales
-                </NavLink>
-              </NavDropdown.Item>
-        
-            </NavDropdown>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-   
+          <Navbar.Brand>Account</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+              <NavDropdown title="Account" id="basic-nav-dropdown">
+                <NavDropdown.Item>
+                  {" "}
+                  <NavLink to="/outlet/add" className="navbar-button">
+                    View Today Sales
+                  </NavLink>
+                </NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
       );
     }
 
     return (
       <Col>
-        <Navbar bg="light" expand="lg">
-          <Navbar.Brand>Pragya Newari Khaja Ghar</Navbar.Brand>
+        <Navbar expand="lg" style={{ backgroundColor: "#17a2b8" }}>
+    <NavLink to="/"> <Navbar.Brand>{CustomName.RESTURANT_NAME}</Navbar.Brand></NavLink> 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
@@ -210,56 +210,58 @@ class Navbars extends Component {
               />
               <Button variant="outline-success">Search</Button>
             </Form> */}
-             <ul className="navbar-nav ml-auto">
-          {/* <!-- Nav Item - Search Dropdown (Visible Only XS) --> */}
+            <ul className="navbar-nav ml-auto">
+              {/* <!-- Nav Item - Search Dropdown (Visible Only XS) --> */}
 
-          <div className="topbar-divider d-none d-sm-block" />
+              <div className="topbar-divider d-none d-sm-block" />
 
-          {/* <!-- Nav Item - User Information --> */}
-          <li className="nav-item dropdown no-arrow">
-            <a
-              className="nav-link dropdown-toggle"
-              href="#d"
-              id="userDropdown"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <span className="mr-2 d-none d-lg-inline text-gray-600 small">
-               {/* TODo Should give the name or the role of the user(admin / user ) */}
-                Admin
-                {/* {Roles[this.state.role - 1]} */}
-              </span>
-              <img className="img-profile rounded-circle" src={Img} alt="profile"/>
-            </a>
-            {/* <!-- Dropdown - User Information --> */}
-            <div
-              className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-              aria-labelledby="userDropdown"
-            >
-              <NavLink className="dropdown-item" to="/profile">
-                <i className="fas fa-user mr-2 text-gray-400" />
-                Profile
-              </NavLink>
-              {/* <a className="dropdown-item" href="#">
+              {/* <!-- Nav Item - User Information --> */}
+              <li className="nav-item dropdown no-arrow">
+                <a
+                  className="nav-link dropdown-toggle"
+                  href="#d"
+                  id="userDropdown"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <span className="mr-2 d-none d-lg-inline text-gray-600 small" >
+                    {/* TODo Should give the name or the role of the user(admin / user ) */}
+                  Admin                  {/* {Roles[this.state.role - 1]} */}
+                  </span>
+                  <img
+                    className="img-profile rounded-circle"
+                    src={Img}
+                    alt="profile"
+                  />
+                </a>
+                {/* <!-- Dropdown - User Information --> */}
+                <div
+                  className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                  aria-labelledby="userDropdown"
+                >
+                  <NavLink className="dropdown-item" to="/profile">
+                    <i className="fas fa-user mr-2 text-gray-400" />
+                    Profile
+                  </NavLink>
+                  {/* <a className="dropdown-item" href="#">
                 <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400" />
                 Settings
               </a> */}
-              {/* <a className="dropdown-item" href="#">
+                  {/* <a className="dropdown-item" href="#">
                 <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400" />
                 Activity Log
               </a> */}
-              <div className="dropdown-divider" />
-              
-                <button className="dropdown-item" onClick={this.logout}>
-                  <i className="fas fa-sign-out mr-2 text-gray-400" />
-                  Logout
-                </button>
-          
-            </div>
-          </li>
-        </ul>
+                  <div className="dropdown-divider" />
+
+                  <button className="dropdown-item" onClick={this.logout}>
+                    <i className="fas fa-sign-out mr-2 text-gray-400" />
+                    Logout
+                  </button>
+                </div>
+              </li>
+            </ul>
           </Navbar.Collapse>
         </Navbar>
         <Row>
@@ -271,15 +273,11 @@ class Navbars extends Component {
 }
 
 const mapActionToProps = dispatch => ({
-  logout: () => dispatch(logout()),
- 
+  logout: () => dispatch(logout())
 });
 
 const mapStateToProps = state => ({
   Userdata: state.auth
 });
 
-export default connect(
-  mapStateToProps,
-  mapActionToProps
-)(withRouter(Navbars));
+export default connect(mapStateToProps, mapActionToProps)(withRouter(Navbars));

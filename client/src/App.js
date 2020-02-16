@@ -43,7 +43,12 @@ class App extends Component {
           exact
           render={() => (this.props.loginData.login ? <ViewUser /> : <CustomSpinner />)}
         />
-        {/* <Route path="/dashboard" component={Dashboard} exact /> */}
+        {/* <Route
+          path={Routes.GET_ORDER_LIST}
+          exact
+          render={() => (this.props.loginData.login ? <Dashboard /> : <CustomSpinner />)}
+        /> */}
+        <Route path={Routes.GET_ORDER_LIST} component={Dashboard} exact />
         <Route path="/outlet/add" component={AddOutlet} exact />
         <Route path="/outlet/view" component={ViewOutlet} exact />
         <Route path="/outlet/edit/:slug" component={EditOutlet} exact />
@@ -53,11 +58,8 @@ class App extends Component {
         <Route path="/menu/add" component={AddMenu} exact />
         <Route path="/menu/view" component={ViewMenu} exact />
         <Route path="/menu/edit/:slug" component={EditMenu} exact />
-        {/* <Route
-          path={Routes.GET_ORDER_LIST}
-          exact
-          render={() => (this.props.loginData.login ? <ViewUser /> : <CustomSpinner />)}
-        /> */}
+        <Route path="/menu/add" component={AddMenu} exact />
+
         
       </Switch>
     );

@@ -114,6 +114,7 @@ const Success ={
     DELETE_CATEGORY : "Category Successfully Deleted",
     ADD_MENU :"New Menu has been Successfully Created",
     EDIT_MENU :"Menu Successfully Updated",
+    STOCK_UPDATED:"Stock is Successfully Updated",
     DELETE_MENU : "Menu Successfully Deleted",
     CUSTOMER_ADD_SUCCESSFUL: "Customer has been added",
     SUPPLIER_ADD_SUCCESSFUL: "Supplier has been added",
@@ -159,6 +160,8 @@ const Success ={
 };
 
 const Errors ={
+  STOCK_UPDATED_FAILED:"Failed to Update the Stock",
+
     ADD_OUTLET:"Something went wrong while creating new outlet",
     EDIT_OUTLET:"Failed to update the Outlet",
     DELETE_OUTLET:"Failed to delete the Outlet",

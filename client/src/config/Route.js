@@ -22,5 +22,5 @@ export default{
     EDIT_MENU:"/menu/edit",
 
     //FrontDesk
-    GET_ORDER_LIST:"front-desk/show"
+    GET_ORDER_LIST:"frontdesk/show"
 }

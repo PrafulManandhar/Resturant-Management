@@ -55,15 +55,15 @@ export default class EditMenu extends Component {
             }
           );
         } else {
-          console.log("category", res.data.data);
+          console.log("categoryfasdf", res.data.data);
 
           this.setState({
-            MName: res.data.data.MName,
-            MCategory: res.data.data.MCategory,
-            Price: res.data.data.Price,
-            MStatus: res.data.data.MStatus,
-            Cost_Price: res.data.data.CPrice,
-            Description: res.data.data.Description
+            MName: res.data.data[0].MName,
+            MCategory: 'buff item',
+            Price: res.data.data[0].Price,
+            MStatus: res.data.data[0].MStatus,
+            Cost_Price: res.data.data[0].CPrice,
+            Description: res.data.data[0].Description
           });
         }
       })

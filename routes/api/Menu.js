@@ -69,34 +69,51 @@ router.get(Router.MANAGE_MENU, async(req, res) => {
 });
 
 //GET OUTLET FROM ID
-router.get(Router.GET_MENU, (req, res) => {
+router.get(Router.GET_MENU, async(req, res) => {
   let slug = req.params.slug;
   console.log(slug);
   if (!slug) {
     return res.json({ type: "error", message: "Failed to load menu" });
   }
-  let statement = "SELECT M_name AS MName,M_status AS MStatus ,Price AS Price , cost_price AS CPrice , description AS Description FROM menu WHERE M_id=?; Select C_name from category WHERE C_id=(SELECT M_category from menu where M_id = ?)";
+  let statement = "SELECT M_name AS MName,M_status AS MStatus ,Price AS Price , cost_price AS CPrice , description AS Description FROM menu WHERE M_id=?";
+  //Select C_name from category WHERE C_id=(SELECT M_category from menu where M_id = ?)
+return await pool.execute(statement,[slug]).then(result=>{
+  // console.log("data",result[0])
+  // let data={
+  //   MName:result[0].MName,
+  //   // MCategory:result[1][0].C_name,
+  //   Price:result[0].Price,
+  //   CPrice:result[0].CPrice,
+  //   Description:result[0].Description,
+  //   MStatus:result[0].MStatus
+  // }
+  // console.log("data of getting menu",data)
+  res.json({ type: "success", data: result[0] });
+}).catch(err=>{
+  console.log("error in eding the menu",err)
+  res.json({ type: "error", message: Errors.VIEW_MENU });
 
-  mysqlConnection.query(statement, [slug,slug], (err, result) => {
-   let data={
-      MName:result[0][0].MName,
-      MCategory:result[1][0].C_name,
-      Price:result[0][0].Price,
-      CPrice:result[0][0].CPrice,
-      Description:result[0][0].Description,
-      MStatus:result[0][0].MStatus
-    }
-    console.log(data)
-    if (!err) {
-      res.json({ type: "success", data: data });
-    } else {
-      res.json({ type: "error", message: Errors.VIEW_MENU });
-    }
-  });
+})
+  // mysqlConnection.query(statement, [slug,slug], (err, result) => {
+  //  let data={
+  //     MName:result[0][0].MName,
+  //     MCategory:result[1][0].C_name,
+  //     Price:result[0][0].Price,
+  //     CPrice:result[0][0].CPrice,
+  //     Description:result[0][0].Description,
+  //     MStatus:result[0][0].MStatus
+  //   }
+  //   console.log(data)
+  //   if (!err) {
+  //     res.json({ type: "success", data: data });
+  //   } else {
+  //     res.json({ type: "error", message: Errors.VIEW_MENU });
+  //   }
+  // });
 });
 
 //Update OUTLET FROM ID
-router.put(Router.UPDATE_MENU, (req, res) => {
+router.put(Router.UPDATE_MENU, async(req, res) => {
   let slug = req.params.slug;
   if (!slug) {
     return res.json({ type: "error", message: "Failed to Update menu" });
@@ -109,16 +126,29 @@ router.put(Router.UPDATE_MENU, (req, res) => {
   if(isValid){
   let statement = "UPDATE menu SET M_name = ? , M_status = ? , M_category = ? , Price = ? , cost_price = ? , description = ? WHERE M_id = ?";
 
-  mysqlConnection.query(statement, [MName,MStatus,MCategory,Price,Cost_Price,Description, slug], (err, result) => {
-    console.log("err",err)
-    console.log("result",result)
-    if (!err && result.affectedRows>0) {
-      console.log(result);
+  return await pool.execute(statement,[MName,MStatus,MCategory,Price,Cost_Price,Description, slug]).then(result=>{
+    if(result[0].affectedRows>0){
       res.json({ type: "success", message: Success.EDIT_MENU });
-    } else {
+
+    }else{
       res.json({ type: "error", message: Errors.EDIT_MENU });
+
     }
-  });
+  }).catch(err=>{
+    console.log("error in edititng tht menu")
+    res.json({ type: "error", message: Errors.EDIT_MENU });
+
+  })
+  // mysqlConnection.query(statement, [MName,MStatus,MCategory,Price,Cost_Price,Description, slug], (err, result) => {
+  //   console.log("err",err)
+  //   console.log("result",result)
+  //   if (!err && result.affectedRows>0) {
+  //     console.log(result);
+  //     res.json({ type: "success", message: Success.EDIT_MENU });
+  //   } else {
+  //     res.json({ type: "error", message: Errors.EDIT_MENU });
+  //   }
+  // });
 }else{
     res.json({errors})
 }
@@ -148,6 +178,61 @@ router.delete(Router.DELETE_MENU, async(req, res) => {
 
   })
   
+});
+
+//Update Available to stockout FROM ID
+router.put(Router.UPDATE_TO_STOCKOUT, async(req, res) => {
+  console.log("availble slug")
+
+  let slug = req.params.slug;
+  if (!slug) {
+    return res.json({ type: "error", message: "Failed to Update Stock" });
+  }
+  console.log("availble slug",slug)
+
+  let statement = "UPDATE menu SET M_status = ? WHERE M_id = ?";
+
+  return await pool.execute(statement,["Stock-out",slug]).then(result=>{
+    if(result[0].affectedRows>0){
+      res.json({ type: "success", message: Success.STOCK_UPDATED });
+
+    }else{
+      res.json({ type: "error", message: Errors.STOCK_UPDATED_FAILED });
+
+    }
+  }).catch(err=>{
+    console.log("error in update tht menu")
+    res.json({ type: "error", message: Errors.STOCK_UPDATED_FAILED });
+
+  })
+
+});
+
+//Update stockout to availbel FROM ID
+router.put(Router.UPDATE_TO_AVAILABLE, async(req, res) => {
+
+  let slug = req.params.slug;
+  console.log("availble slug",slug)
+  if (!slug) {
+    return res.json({ type: "error", message: "Failed to Update Stock" });
+  }
+
+  let statement = "UPDATE menu SET M_status = ? WHERE M_id = ?";
+
+  return await pool.execute(statement,["available",slug]).then(result=>{
+    if(result[0].affectedRows>0){
+      res.json({ type: "success", message: Success.STOCK_UPDATED });
+
+    }else{
+      res.json({ type: "error", message: Errors.STOCK_UPDATED_FAILED });
+
+    }
+  }).catch(err=>{
+    console.log("error in update tht menu")
+    res.json({ type: "error", message: Errors.STOCK_UPDATED_FAILED });
+
+  })
+
 });
 
 module.exports = router;

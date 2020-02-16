@@ -22,4 +22,7 @@ module.exports={
     GET_MENU:"/menu/:slug",
     UPDATE_MENU:"/menu/:slug",
     DELETE_MENU:"/menu/:slug",
+    UPDATE_TO_STOCKOUT:"/menu/stockout/:slug",
+    UPDATE_TO_AVAILABLE:"/menu/available/:slug"
+
 }
