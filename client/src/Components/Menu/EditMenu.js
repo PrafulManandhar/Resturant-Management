@@ -23,7 +23,8 @@ export default class EditMenu extends Component {
     Cost_Price: "",
     Description: "",
     categories: "",
-    alertVariant: ""
+    alertVariant: "",
+    defaultCategoryId:null
   };
   changeHandler = event => {
     this.setState({ [event.target.name]: event.target.value, errors: "" });
@@ -42,7 +43,7 @@ export default class EditMenu extends Component {
         `http://localhost:5000/api/Menu/menu/${this.props.match.params.slug}`
       )
       .then(res => {
-        console.log(res.data.type);
+        console.log("res.data",res);
         if (res.data.type === "error") {
           this.setState(
             {
@@ -55,15 +56,15 @@ export default class EditMenu extends Component {
             }
           );
         } else {
-          console.log("categoryfasdf", res.data.data);
+          console.log("categoryfasdf", res.data);
 
           this.setState({
-            MName: res.data.data[0].MName,
-            MCategory: 'buff item',
-            Price: res.data.data[0].Price,
-            MStatus: res.data.data[0].MStatus,
-            Cost_Price: res.data.data[0].CPrice,
-            Description: res.data.data[0].Description
+            MName: res.data.data.MName,
+            MCategory: res.data.data.MCategory,
+            Price: res.data.data.Price,
+            MStatus: res.data.data.MStatus,
+            Cost_Price: res.data.data.CPrice,
+            Description: res.data.data.Decsription
           });
         }
       })
@@ -156,13 +157,29 @@ export default class EditMenu extends Component {
     const categoriesOptions = [];
     if (!this.state.loading) {
       let categories = this.state.categories;
-      for (let category of categories) {
-        categoriesOptions.push(
-          <option key={category.id} value={category.id}>
-            {category.cnames}
-          </option>
-        );
-      }
+      // for (let category of categories) {
+      //   {category.cnames==this.state.data.MCategory?(
+      //     categoriesOptions.push(
+      //     <option key={category.id} value={category.id}>
+      //       {category.cnames}
+      //     </option>):()};
+        
+      //   );
+      // }
+        // categories.map(category=>{
+          for (let category of categories){
+            console.log("category,",this.state.MCategory)
+            if(category.cnames!= this.state.MCategory){
+              categoriesOptions.push(
+                    <option key={category.id} value={category.id}>
+                      {category.cnames}
+                    </option>)
+            }else{
+              this.state.defaultCategoryId=category.id
+            }
+          }
+         
+        
       if (!this.state.loading)
         display = (
           <>
@@ -209,12 +226,11 @@ export default class EditMenu extends Component {
                                 className={classnames({
                                   "is-invalid": errors.MCategory
                                 })}
-                                value={this.state.MCategory}
                                 as="select"
                                 name="MCategory"
                                 onChange={this.changeHandler}
                               >
-                                <option value="">Select a Menu Category</option>
+                              <option value="">{this.state.MCategory}</option>
                                 {categoriesOptions}
                               </Form.Control>
                               <Form.Control.Feedback type="invalid">

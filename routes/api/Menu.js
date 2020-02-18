@@ -16,26 +16,24 @@ getCategoryName = async () => {
   return await pool
     .execute(Statement)
     .then(result => {
-      console.log("getCategoryName", result[0]);
       return result[0];
     })
     .catch(err => {
       console.log("error getting the Category Name", err);
     });
 };
-getCategoryNameById = async(slug) =>{
+getCategoryNameById = async slug => {
   let Statement =
-    "SELECT C_name from category INNER JOIN menu ON  category.C_id = menu.M_category WHERE menu.M_id = ? ";
+    "SELECT C_name from category INNER JOIN menu ON  category.C_id = menu.M_category WHERE menu.M_id = ?;";
   return await pool
-    .execute(Statement,slug)
+    .execute(Statement, [slug])
     .then(result => {
-      console.log("getCategoryName", result[0]);
-      return result[0];
+        return result[0];
     })
     .catch(err => {
       console.log("error getting the Category Name", err);
     });
-}
+};
 
 getMenu = async () => {
   let Statement =
@@ -53,11 +51,11 @@ getMenu = async () => {
     });
 };
 
-getMenuById = async (slug) => {
+getMenuById = async slug => {
   let Statement =
     "SELECT M_id AS M_id , M_name AS MName ,M_status AS MStatus, Price AS Price , cost_price AS CPrice , description AS Decsription from menu WHERE M_id=?";
   return await pool
-    .execute(Statement,slug)
+    .execute(Statement, [slug])
     .then(result => {
       return result[0];
     })
@@ -75,7 +73,6 @@ router.post(Router.ADD_MENU, async (req, res) => {
   let { MName, MCategory, Price, MStatus, Cost_Price, Description } = req.body;
   Cost_Price = Cost_Price ? Cost_Price : 0;
   Description = Description ? Description : "";
-  console.log(req.body);
   let { errors, isValid } = ValidateMenu(req.body);
   if (isValid) {
     let Statement =
@@ -111,11 +108,10 @@ router.get(Router.MANAGE_MENU, async (req, res) => {
   let CategoryName = await getCategoryName();
   let Menu = await getMenu();
 
-  console.log("Menu",Menu)
   let data = [];
   for (let i = 0; i < CategoryName.length; i++) {
     data.push({
-      M_id:Menu[i].M_id,
+      M_id: Menu[i].M_id,
       MName: Menu[i].MName,
       MCategory: CategoryName[i].C_name,
       Price: Menu[i].Price,
@@ -135,51 +131,25 @@ router.get(Router.MANAGE_MENU, async (req, res) => {
 //GET OUTLET FROM ID
 router.get(Router.GET_MENU, async (req, res) => {
   let slug = req.params.slug;
-  console.log(slug);
   if (!slug) {
     return res.json({ type: "error", message: "Failed to load menu" });
   }
-  // let CategoryNameById = await getCategoryNameById(slug);
-  // let MenuById = await getMenuById(slug);
-  // console.log("CategoryNameById",CategoryNameById)
-  let statement =
-    "SELECT M_name AS MName,M_status AS MStatus ,Price AS Price , cost_price AS CPrice , description AS Description FROM menu WHERE M_id=?";
-  //Select C_name from category WHERE C_id=(SELECT M_category from menu where M_id = ?)
-  return await pool
-    .execute(statement, [slug])
-    .then(result => {
-      // console.log("data",result[0])
-      // let data={
-      //   MName:result[0].MName,
-      //   // MCategory:result[1][0].C_name,
-      //   Price:result[0].Price,
-      //   CPrice:result[0].CPrice,
-      //   Description:result[0].Description,
-      //   MStatus:result[0].MStatus
-      // }
-      // console.log("data of getting menu",data)
-      res.json({ type: "success", data: result[0] });
-    })
-    .catch(err => {
-      console.log("error in eding the menu", err);
-      res.json({ type: "error", message: Errors.VIEW_MENU });
-    });
-  // mysqlConnection.query(statement, [slug,slug], (err, result) => {
-  //  let data={
-  //     MName:result[0][0].MName,
-  //     MCategory:result[1][0].C_name,
-  //     Price:result[0][0].Price,
-  //     CPrice:result[0][0].CPrice,
-  //     Description:result[0][0].Description,
-  //     MStatus:result[0][0].MStatus
-  //   }
-  //   console.log(data)
-  //   if (!err) {
-  //     res.json({ type: "success", data: data });
-  //   } else {
-  //     res.json({ type: "error", message: Errors.VIEW_MENU });
-  //   }
-  // });
+  let CategoryName = await getCategoryNameById(slug);
+  let Menu = await getMenuById(slug);
+  let data = {
+    M_id: Menu[0].M_id,
+    MName: Menu[0].MName,
+    MCategory: CategoryName[0].C_name,
+    Price: Menu[0].Price,
+    CPrice: Menu[0].CPrice,
+    Decsription: Menu[0].Decsription,
+    MStatus: Menu[0].MStatus
+  };
+  if (CategoryName && Menu) {
+    res.json({ type: "success", data: data });
+  } else {
+    res.json({ type: "error", message: Errors.VIEW_MENU });
+  }
 });
 
 //Update OUTLET FROM ID
@@ -192,7 +162,6 @@ router.put(Router.UPDATE_MENU, async (req, res) => {
   Cost_Price = Cost_Price ? Cost_Price : 0;
   Description = Description ? Description : "";
   let { errors, isValid } = ValidateMenu(req.body);
-  console.log("data inside Update", req.body);
   if (isValid) {
     let statement =
       "UPDATE menu SET M_name = ? , M_status = ? , M_category = ? , Price = ? , cost_price = ? , description = ? WHERE M_id = ?";
@@ -215,7 +184,7 @@ router.put(Router.UPDATE_MENU, async (req, res) => {
         }
       })
       .catch(err => {
-        console.log("error in edititng tht menu");
+        console.log("error in edititng tht menu",err);
         res.json({ type: "error", message: Errors.EDIT_MENU });
       });
     // mysqlConnection.query(statement, [MName,MStatus,MCategory,Price,Cost_Price,Description, slug], (err, result) => {
@@ -235,9 +204,7 @@ router.put(Router.UPDATE_MENU, async (req, res) => {
 
 //Delete OUTLET FROM ID
 router.delete(Router.DELETE_MENU, async (req, res) => {
-  console.log("react");
   let slug = req.params.slug;
-  console.log(slug);
   if (!slug) {
     return res.json({ type: "error", message: "Failed to Delete menu" });
   }
@@ -260,13 +227,11 @@ router.delete(Router.DELETE_MENU, async (req, res) => {
 
 //Update Available to stockout FROM ID
 router.put(Router.UPDATE_TO_STOCKOUT, async (req, res) => {
-  console.log("availble slug");
 
   let slug = req.params.slug;
   if (!slug) {
     return res.json({ type: "error", message: "Failed to Update Stock" });
   }
-  console.log("availble slug", slug);
 
   let statement = "UPDATE menu SET M_status = ? WHERE M_id = ?";
 
@@ -288,7 +253,6 @@ router.put(Router.UPDATE_TO_STOCKOUT, async (req, res) => {
 //Update stockout to availbel FROM ID
 router.put(Router.UPDATE_TO_AVAILABLE, async (req, res) => {
   let slug = req.params.slug;
-  console.log("availble slug", slug);
   if (!slug) {
     return res.json({ type: "error", message: "Failed to Update Stock" });
   }
