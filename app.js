@@ -39,8 +39,8 @@ app.use("/api/utility", utility);
 // const modules = require("./routes/api/modules");
 // app.use("/api/modules", modules);
 
-// const order=require("./routes/api/order");
-// app.use("/api/order",order);
+const order=require("./routes/api/order");
+app.use("/api/order",order);
 
 const category=require("./routes/api/category");
 app.use("/api/category",category);

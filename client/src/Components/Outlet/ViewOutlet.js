@@ -90,11 +90,28 @@ export default class ViewOutlet extends Component {
 
   loadData =async()=>{
     await Axios.get("http://localhost:5000/api/order/outlet")
-      .then(res => {
-        console.log(res);
-        this.setState({ data: res.data.data });
-      })
-      .catch(err => console.log("err", err));
+    .then(res => {
+      console.log("loadData",res);
+      if (res.data.type === "success") {
+        this.setState({
+          data: res.data.data
+        });
+      } else if (res.data.type === "error") {
+
+        console.log("error",res.data.message)
+        this.setState(
+          {
+            message: res.data.message,
+            alertVariant: "danger",
+            errors: ""
+          },
+          () => {
+            this.showAlerts();
+          }
+        );
+      }
+    })
+    .catch(err => console.log("err", err));
   }
 
   editHandler = e => {
@@ -118,12 +135,7 @@ export default class ViewOutlet extends Component {
     this.setState({ show: false });
   };
   componentDidMount = async () => {
-    await Axios.get("http://localhost:5000/api/order/outlet")
-      .then(res => {
-        console.log(res);
-        this.setState({ data: res.data.data });
-      })
-      .catch(err => console.log("err", err));
+    await this.loadData();
 
       this.loadTable();
    
