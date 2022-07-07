@@ -27,7 +27,7 @@
     "express": "^4.17.1",
     "express-pino-logger": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mysql2": "^1.6.5",
     "nodemailer": "^6.2.1",
     "passport": "^0.4.0",
